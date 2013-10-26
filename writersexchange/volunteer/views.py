@@ -19,8 +19,9 @@ def apply(request):
 		email = form.cleaned_data['email']
 		volunteer = get_object_or_404(Volunteer, email==email)
                 # Send email to Stacy to inform her of new applicant
-                # TODO: replace '' with message
-                # TODO: replace 'from@example.com' with actual email to send from
+                # TODO: replace '' with message body
+                # TODO: set EMAIL_BACKEND in settings file to the actual email backend
+                # TODO: change 'from@example.com' to actual address to send from
                 # TODO: change 'stacey@mailinator.com' to Stacey's email
                 send_mail('New Volunteer Application', '', 'from@example.com', ['stacey@mailinator.com'], fail_silently=False)
 		return HttpResponse("Thank you for applying, we will notify you through email when your application has been")
