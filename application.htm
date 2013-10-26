@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+	<title>Application page</title>
+	<link rel="stylesheet" href="application/css/application.css" type="text/css">
+</head>
+<body>
+<div id="contact">
+	<form id="contact-form" method="post">
+ 		<div>
+			<label class="name">Name<span>(required)</span></label>
+			<input type="text" name="name">
+		</div>
+		<div>
+			<label class="email-address">Email Address<span>(required)</span></label>
+			<input type="text" name="email-address">
+		</div>
+		<div>
+			<label class="phone-number">Phone Number<span>(required)</span></label>
+			<input type="text" name="phone-number">
+		</div>
+		<div>
+			<label class="street-address">Street Address<span>(required)</span></label>
+			<input type="text" name="street-address">
+		</div>
+		<div>
+			<label class="city">City<span>(required)</span></label>
+			<input type="text" name="city">
+		</div>
+		<div>
+			<input type="submit">
+		</div>
+	</form>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="vendor/jquery.validate.js"></script>
+<script src="vendor/additional-methods.js"></script>
+<script>
+$(document).ready(function () {
+	console.log($('#contact-form'));
+    $('#contact-form').validate({
+        rules: {
+            "name": "required",
+            "email-address": {
+                required: true,
+                email: true
+            },
+            "phone-number": {
+            	required: true,
+            	phoneUS: true
+            },
+            "street-address": "required",
+            city: "required"
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+});
+</script>
+</body>
+</html>
