@@ -21,12 +21,11 @@ def apply(request):
 		email = form.cleaned_data['email']
 		a = 1
 		volunteer = get_object_or_404(Volunteer, email=email)
-                # Send email to Stacy to inform her of new applicant
+                # Send email to NOTIFICATION_EMAIL about new applicant.
                 # TODO: replace '' with message body
                 # TODO: set EMAIL_BACKEND in settings file to the actual email backend
                 # TODO: change 'from@example.com' to actual address to send from
-                # TODO: change 'stacey@mailinator.com' to Stacey's email
-                send_mail('New Volunteer Application', '', 'from@example.com', ['stacey@mailinator.com'], fail_silently=False)
+                send_mail('Writer\'s Exchange Volunteer Application', '', 'from@example.com', [NOTIFICATION_EMAIL], fail_silently=False)
 		return HttpResponse("Thank you for applying, we will notify you through email when your application has been reviewed.")
 	else: 
 	    return render_to_response('volunteer/apply.html',
