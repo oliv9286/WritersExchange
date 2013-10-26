@@ -19,9 +19,9 @@ urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^apply/', views.apply, name="apply"),
     url(r'^query/', views.query, name="query"),
-    url(r'^login/', views.signinpage, name="signin"),
+    url(r'^login/', views.login, name="login"),
     url(r'^login/success/', views.signin, name="signinresult"),
-    url(r'^register/', views.register, name="register"),
+    url(r'^signup/', views.signup, name="signup"),
     url(r'^admin/', include(admin.site.urls)),
 )
 

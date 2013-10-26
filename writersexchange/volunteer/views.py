@@ -64,22 +64,28 @@ def signin(request):
 	        # Return an 'invalid login' error message.
 	        return HttpResponse('invalid login')
 
-def register(request):
-	
-	uf = UserForm(request.POST)
-	if uf.is_valid():
-		user = User.objects.create(username=uf['username'],email=uf['email'], password=uf['password'], \
-				first_name=uf['firstname'], last_name=['lastname'])
-		user.save()
-		return HttpResponseRedirect('index')
-	else:
-		uf = UserForm(prefix='user')
-	return render_to_response('volunteer/register.html',
-								dict(userform=uf,
-                                     context_instance=RequestContext(request)))
 
 
+def signup(request):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse("index"))
+        if request.method == 'POST':
+            form = UserForm(request.POST)
+            if form.is_valid():
+                user = User.objects.create_user(username=form.cleaned_data['username'], password = form.cleaned_data['password'], \
+                	email=form.cleaned_data['email'])
+                user.save()
 
-
+                new_user = authenticate(username=request.POST['username'],
+                                    password=request.POST['password'], email=request.POST['email'])
+                login(request, new_user)
+                return HttpResponseRedirect(reverse("index"))
+            else:
+                return render_to_response('volunteer/register.html', {'form': form}, context_instance=RequestContext(request))
+        else:
+                ''' user is not submitting the form, show them a blank registration form '''
+                form = UserForm()
+                context = {'form': form}
+                return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
 
 
