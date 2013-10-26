@@ -1,0 +1,17 @@
+<html>
+<head>
+  <title>WE Application Review</title>
+</head>
+
+<body>
+  {% for item in display_fields %}
+    <div>
+       <label class="application-field">{{item.0}} : {{item.1}}</label>
+    </div>
+  {% endfor %}
+  <form name="apply_result" method="get" action={{forward_url}}>
+    <div><input type="submit" name="result" value="Approve"></div>
+    <div><input type="submit" name="result" value="Reject"></div>
+  </form>
+</body>
+</html>

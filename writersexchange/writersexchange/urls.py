@@ -23,5 +23,8 @@ urlpatterns = patterns('',
     url(r'^login/success/', views.signin, name="signinresult"),
     url(r'^register/', views.register, name="register"),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^applications/(\w+)/', views.application_review, name="applications"),
+    url(r'^application_result/(\w+)/', views.application_result),
+    url(r'^applications/', views.application_list)
 )
 
