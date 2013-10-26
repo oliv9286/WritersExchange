@@ -16,7 +16,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^$', views.index, name='index'),
-    url(r'^apply/', views.apply, name='apply'),
-    url(r'^submitApplication/', views.submit_application, name="submit_application"),
+    url(r'^apply/', views.apply, name="apply"),
     url(r'^admin/', include(admin.site.urls)),
 )

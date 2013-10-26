@@ -1,27 +1,25 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render, get_object_or_404
+from django.template import RequestContext
+from django.shortcuts import redirect, render, get_object_or_404, render_to_response
 from volunteer.models import Volunteer
+from volunteer.forms import ApplicationForm
 from django import forms
 
 def index(request):
-	return redirect('/apply')
+	return render_to_response('volunteer/index.html')
 
 def apply(request):
-
-	return render(request, 'volunteer/apply.html')
-
-def submit_application(request):
-	if request.POST:
-		v = Volunteer(request.POST.get('name'), request.POST.get('email'), phone=request.POST.get('phone'), address=request.POST.get('address'), \
-		 city=request.POST.get('city'), province=request.POST.get('province'), isApproved=False, reference1name=request.POST.get('r1name'), \
-		 reference1email=request.POST.get('r1email'), reference1phone=request.POST.get('r1phone'), reference2name=request.POST.get('r2name'), \
-		 reference2email=request.POST.get('r2email'), reference2phone=request.POST.get('r2phone'))
-
-		v.save()
+	form = ApplicationForm(request.POST)
+	if form.is_valid():
+		new_application = form.save()
+		new_application.save()
 		return HttpResponse("Success")
+	else: 
+	    return render_to_response('volunteer/apply.html',
+                          {'application_form': form},
+                          context_instance=RequestContext(request))
 
-	return HttpResponse("Fail")
 
 
 
