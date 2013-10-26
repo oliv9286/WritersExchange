@@ -35,9 +35,7 @@ class Event(models.Model):
 	date = models.DateField(auto_now=False, auto_now_add=False null=False)
 	startTime = models.TimeField(auto_now=False, auto_now_add=False, null=False)
 	endTime = models.TimeField(auto_now=False, auto_now_add=False, null=False)
-	name = models.CharField(max_length=200, null=False)
-
-	program = models.ForeignKey(Program)
+	name = models.ForeignKey(name.Program)
 
 class Program(models.Model):
 	name = models.CharField(max_length=200, null=False)
