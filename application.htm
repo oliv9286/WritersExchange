@@ -88,7 +88,29 @@ $(document).ready(function () {
             	phoneUS: true
             },
             "street-address": "required",
-            city: "required"
+            "city": "required",
+            "province": "required",
+            "ref1name": "required",
+            "ref1email": {
+            	required: true,
+            	email: true
+            },
+            "ref1phone": {
+            	required: true,
+            	phoneUS: true
+            },
+            "ref2name": "required",
+            "ref2email": {
+            	required: true,
+            	email: true
+            },
+            "ref2phone": {
+            	required: true,
+            	phoneUS: true
+            },
+            "about": "required",
+            "availability": "required"
+
         },
         submitHandler: function (form) {
             form.submit();
