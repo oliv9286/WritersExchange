@@ -20,7 +20,7 @@ def apply(request):
 
         return HttpResponse("Thank you for applying, we will notify you through email when your application has been")
     else: 
-            return render_to_response('volunteer/apply.html',
+        return render_to_response('volunteer/apply.html',
                                                     {'application_form': form},
                                                     context_instance=RequestContext(request))
 
@@ -35,7 +35,7 @@ def application_review(request,name):
                           '/application_result/' + name},
                          context_instance=RequestContext(request))
     else:
-        login_redirect(request)
+        return login_redirect(request)
 def application_result(request, name):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, name=name)
@@ -45,26 +45,27 @@ def application_result(request, name):
          raise Http404    #TODO display a failure page
        if result == 'Approve':
          approve_application(volunteer)
-         return render_to_response('volunteer/apply_review_confirm.html',
-                                   {'result':'approved'}, 
+         return render_to_response('volunteer/volConfirm.html',
+                                   {'result':True, 'name':volunteer.name}, 
                                    context_instance=RequestContext(request))
        else:
          reject_application(volunteer)
-         return render_to_response('volunteer/apply_review_confirm.html',
-                                   {'result':'rejected'}, 
+         return render_to_response('volunteer/volConfirm.html',
+                                   {'result':False, 'name':volunteer.name}, 
                                    context_instance=RequestContext(request))
     else:
-        login_redirect(request)
+        return login_redirect(request)
 
 def application_list(request):
     if admin_is_logged_in():
-       needingReview = Volunteer.objects.filter(isApproved_exact=False)
+       needingReview = Volunteer.objects.filter(isApproved__exact=False)
        applicationList = map(name_email_tuple, needingReview)
-       render_to_response('volunteer/apply_review_list.html',
-                          {'applicationTuples':applicationList}
-                          context_instance=RequestContext(request)))
+       print applicationList
+       return render_to_response('volunteer/apply_review_list.html',
+                          {'applicationTuples':applicationList},
+                          context_instance=RequestContext(request))
     else:
-       login_redirect(request)
+       return login_redirect(request)
 
 # def confirmation(request, email):
 #     match_volunteer = get_object_or_404(Volunteer, email==email)

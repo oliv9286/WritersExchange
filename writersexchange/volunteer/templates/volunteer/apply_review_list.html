@@ -1,0 +1,11 @@
+<html>
+<head>
+  <title>Application List</title>
+</head>
+<body>
+<table>
+  {% for application in applicationTuples %}
+    <tr><td>{{application.0}}</td><td>{{application.1}}</td></tr>
+  {% endfor %}
+</table>
+</html>
