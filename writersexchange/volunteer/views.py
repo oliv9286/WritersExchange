@@ -31,12 +31,23 @@ def apply(request):
                           {'application_form': form
                           'a' : a},
                           context_instance=RequestContext(request))
-
 # def confirmation(request, email):
 # 	match_volunteer = get_object_or_404(Volunteer, email==email)
 # 	return render_to_response('volunteer/confirm.html',
 # 							{'applicant':match_volunteer},
 # 							context_instance=RequestContext(request))
+
+#UNTESTED
+ def get_all_programs(request):
+	programs = Program.object.all().values('name').orderby('name')
+	return render_to_response('volunteer/filterEvents.html')
+							{'programs':programs}
+#UNTESTED							
+ def get_events_on_day(request):
+	events = Program.object.filter(request['submitDay']).aggregate(date.weekday())
+	return render_to_response('volunteer/selectEvents.html')
+							{'programs':events}
+	
 
 
 
