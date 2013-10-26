@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^apply/', views.apply, name="apply"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^applications/(\w+)/', views.application_review, name="applications")
+    url(r'^applications/', views.application_list)
 )

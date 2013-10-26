@@ -27,17 +27,7 @@ def apply(request):
 def application_review(request,name):
     if admin_is_logged_in():
         volunteer = get_object_or_404(Volunteer, name=name)
-        fieldList = [("Name", volunteer.name), ("Email", volunteer.email), 
-            ("Phone #", volunteer.phone), ("Address", volunteer.address), 
-            ("City", volunteer.city), ("Province", volunteer.province), 
-            ("Reference #1", volunteer.reference1name), 
-            ("Reference #1 Email", volunteer.reference1email),
-            ("Reference #1 Phone", volunteer.reference1phone),
-            ("Reference #2", volunteer.reference2name),
-            ("Reference #2 Email", volunteer.reference2email),
-            ("Reference #2 Phone", volunteer.reference2phone),
-            ("Experience", volunteer.experience),
-            ("Availability", volunteer.availability)]
+        fieldList = generate_field_list(volunteer)
         return render_to_response(
                          'volunteer/apply_review.html',
                          {'display_fields':fieldList,
@@ -65,6 +55,17 @@ def application_result(request, name):
                                    context_instance=RequestContext(request))
     else:
         login_redirect(request)
+
+def application_list(request):
+    if admin_is_logged_in():
+       needingReview = Volunteer.objects.filter(isApproved_exact=False)
+       applicationList = map(name_email_tuple, needingReview)
+       render_to_response('volunteer/apply_review_list.html',
+                          {'applicationTuples':applicationList}
+                          context_instance=RequestContext(request)))
+    else:
+       login_redirect(request)
+
 # def confirmation(request, email):
 #     match_volunteer = get_object_or_404(Volunteer, email==email)
 #     return render_to_response('volunteer/confirm.html',
