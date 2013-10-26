@@ -4,68 +4,74 @@
 	<link rel="stylesheet" href="application/css/application.css" type="text/css">
 </head>
 <body>
-<div id="contact">
-	<form id="contact-form" method="post">
- 		<div>
-			<label class="name">Name<span>(required)</span></label>
+<div id="application">
+	<form id="application-form" method="post">
+		<span>* = Required</span>
+ 		<div class="pm-step">
+			<label class="name">Name<span class="required">*</span></label>
 			<input type="text" name="name">
 		</div>
-		<div>
-			<label class="email-address">Email Address<span>(required)</span></label>
+		<div class="pm-step">
+			<label class="email-address">Email Address<span class="required">*</span></label>
 			<input type="text" name="email-address">
 		</div>
-		<div>
-			<label class="phone-number">Phone Number<span>(required)</span></label>
+		<div class="pm-step">
+			<label class="phone-number">Phone Number<span class="required">*</span></label>
 			<input type="text" name="phone-number">
 		</div>
-		<div>
-			<label class="street-address">Street Address<span>(required)</span></label>
+		<div class="pm-step">
+			<label class="street-address">Street Address<span class="required">*</span></label>
 			<input type="text" name="street-address">
 		</div>
-		<div>
-			<label class="city">City<span>(required)</span></label>
+		<div class="pm-step">
+			<label class="city">City<span class="required">*</span></label>
 			<input type="text" name="city">
 		</div>
-		<div>
-			<label class="province">Province<span>(required)</span></label>
+		<div class="pm-step">
+			<label class="province">Province<span class="required">*</span></label>
 			<input type="text" name="province">
 		</div>
-		<div>
-			<label class="ref1name">Reference 1: Name<span>(required)</span></label>
+		<div class="clearfix">
+		<div class="pm-step multi">
+			<label class="ref1name">Reference 1: Name<span class="required">*</span></label>
 			<input type="text" name="ref1name">
 		</div>
-		<div>
-			<label class="ref1email">Reference 1: Email<span>(required)</span></label>
+		<div class="pm-step multi">
+			<label class="ref1email">Email<span class="required">*</span></label>
 			<input type="text" name="ref1email">
 		</div>
-		<div>
-			<label class="ref1phone">Reference 1: Phone<span>(required)</span></label>
+		<div class="pm-step multi">
+			<label class="ref1phone">Phone<span class="required">*</span></label>
 			<input type="text" name="ref1phone">
 		</div>
-		<div>
-			<label class="ref2name">Reference 2: Name<span>(required)</span></label>
+		<div class="clearfix">
+		<div class="pm-step multi">
+			<label class="ref2name">Reference 2: Name<span class="required">*</span></label>
 			<input type="text" name="ref2name">
 		</div>
-		<div>
-			<label class="ref2email">Reference 2: Email<span>(required)</span></label>
+		<div class="pm-step multi">
+			<label class="ref2email">Email<span class="required">*</span></label>
 			<input type="text" name="ref2email">
 		</div>
-		<div>
-			<label class="ref2phone">Reference 2: Phone<span>(required)</span></label>
+		<div class="pm-step multi">
+			<label class="ref2phone">Phone<span class="required">*</span></label>
 			<input type="text" name="ref2phone">
 		</div>
-		<div>
-			<label class="about">In one paragraph, please tell us a little about yourself: Who are you? Why would you like to volunteer with the 	Writers' Exchange?<br>
- 				What special skills would you like to share? Do you have any experience working with young learners?<span>(required)</span></label>
-			<textarea rows="4" cols="50" name="about"></textarea>
+		<div class="pm-step">
+			<label class="about">
+				<p>In one paragraph, please tell us a little about yourself: Who are you? Why would you like to volunteer with the Writers' Exchange?</p>
+ 				<p>What special skills would you like to share? Do you have any experience working with young learners?<span class="required">*</span></p>
+ 			</label>
+			<textarea rows="6" cols="70" name="about"></textarea>
 		</div>
-		<div>
-			<label class="availability">Availability: When would you like to volunteer? Please list specific dates and times.<br>
-				For example, Monday mornings, Tuesdays during the after-school program, weekdays after 1 p.m.<span>(required)</span></label>
+		<div class="pm-step">
+			<label class="availability">
+				<p>Availability: When would you like to volunteer? Please list specific dates and times.</p>
+				<p>For example, Monday mornings, Tuesdays during the after-school program, weekdays after 1 p.m.<span class="required">*</span></p></label>
 			<textarea rows="4" cols="50" name="availability"></textarea>
 		</div>
-		<div>
-			<input type="submit" value="Submit Application">
+		<div class="pm-step">
+			<input class="submit" type="submit" value="Submit Application">
 		</div>
 	</form>
 </div>
@@ -73,10 +79,10 @@
 <script>window.jQuery || document.write('<script src="vendor/jquery-1.9.1.min.js"><\/script>')</script>
 <script src="vendor/jquery.validate.js"></script>
 <script src="vendor/additional-methods.js"></script>
+<script src="vendor/jquery.promin.js"></script>
 <script>
 $(document).ready(function () {
-	console.log($('#contact-form'));
-    $('#contact-form').validate({
+    $('#application-form').validate({
         rules: {
             "name": "required",
             "email-address": {
