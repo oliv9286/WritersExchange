@@ -53,6 +53,7 @@ body, input, textarea {
 
 #application-form textarea {
 	width: 540px;
+	height: 100px;
 }
 
 #application-form input[type="submit"] {
