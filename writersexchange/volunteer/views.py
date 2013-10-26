@@ -119,9 +119,7 @@ def application_result(request, name):
 def application_list(request):
     if admin_is_logged_in():
        needingReview = Volunteer.objects.filter(isApproved__exact=False)
-       print needingReview
        applicationList = map(name_email_tuple, needingReview)
-       print applicationList
        return render_to_response('volunteer/apply_review_list.html',
                           {'applicationTuples':applicationList},
                           context_instance=RequestContext(request))
