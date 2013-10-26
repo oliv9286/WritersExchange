@@ -8,9 +8,9 @@ class Volunteer(models.Model):
 	address = models.CharField(max_length=500, null=False)
 	city = models.CharField(max_length=50, null=False)
 	province = models.CharField(max_length=20, null=False)
-	isApproved = models.BooleanField(default=False, null=False, default=False)
-	hasCrimCheck = models.BooleanField(default=False, null=False, default=False)
-	hasTraining = models.BooleanField(default=False, null=False, default=False)
+	isApproved = models.BooleanField(default=False, null=False)
+	hasCrimCheck = models.BooleanField(default=False, null=False)
+	hasTraining = models.BooleanField(default=False, null=False)
 	reference1name = models.CharField(max_length=200, null=False)
 	reference1email = models.EmailField(max_length=200, null=False)
 	reference1phone = models.CharField(max_length=10, null=False)
@@ -20,7 +20,7 @@ class Volunteer(models.Model):
 	experience = models.CharField(max_length=2500, null=False)
 	availability = models.CharField(max_length=2500, null=False)
 
-	events = ManyToManyField(Event)
+	#events = ManyToManyField(Event)
 
 	def is_approved(self):
 		return self.isApproved
@@ -31,12 +31,14 @@ class Volunteer(models.Model):
 	def hasTraining(self):
 		return self.hasTraining
 
+
+
+class Program(models.Model):
+	name = models.CharField(max_length=200, null=False)
+
 class Event(models.Model):
 	startDTTM = models.DateTimeField(max_length=12, auto_now_add=False, null=False)
 	endDTTM = models.DateTimeField(max_length=12, auto_now_add=False, null=False)
 	name = models.CharField(max_length=200, null=False)
 
 	program = models.ForeignKey(Program)
-
-class Program(models.Model):
-	name = models.CharField(max_length=200, null=False)

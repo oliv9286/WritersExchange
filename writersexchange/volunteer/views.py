@@ -30,8 +30,7 @@ def apply(request):
 		return HttpResponse("Thank you for applying, we will notify you through email when your application has been reviewed.")
 	else: 
 	    return render_to_response('volunteer/apply.html',
-                          {'application_form': form
-                          'a' : a},
+                          {'application_form': form},
                           context_instance=RequestContext(request))
 # generates a list of data
 @login_required
@@ -66,18 +65,15 @@ def signin(request):
 	        return HttpResponse('invalid login')
 
 def register(request):
-	uf = UserForm(request.POST, prefix='user')
-	# upf = UserProfileForm(request.POST, prefix="userprofile")
-	if uf.is_valid() and upf.is_valid():
-		user = uf.save()
+	
+	uf = UserForm(request.POST)
+	if uf.is_valid():
+		user = User.objects.create(username=uf['username'],email=uf['email'], password=uf['password'], \
+				first_name=uf['firstname'], last_name=['lastname'])
 		user.save()
-		# UserProfileForm = upf.save(commit=False)
-		# userprofile.user = user
-		# userprofile.save()
 		return HttpResponseRedirect('index')
 	else:
 		uf = UserForm(prefix='user')
-		# upf = UserProfileForm(prefix='userprofile')
 	return render_to_response('volunteer/register.html',
 								dict(userform=uf,
                                      context_instance=RequestContext(request)))
