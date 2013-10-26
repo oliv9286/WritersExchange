@@ -32,8 +32,9 @@ class Volunteer(models.Model):
 		return self.hasTraining
 
 class Event(models.Model):
-	startDTTM = models.DateTimeField(max_length=12, auto_now_add=False, null=False)
-	endDTTM = models.DateTimeField(max_length=12, auto_now_add=False, null=False)
+	date = models.DateField(auto_now=False, auto_now_add=False null=False)
+	startTime = models.TimeField(auto_now=False, auto_now_add=False, null=False)
+	endTime = models.TimeField(auto_now=False, auto_now_add=False, null=False)
 	name = models.CharField(max_length=200, null=False)
 
 	program = models.ForeignKey(Program)
