@@ -29,7 +29,6 @@ def apply(request):
 	    return render_to_response('volunteer/apply.html',
                           {'application_form': form},
                           context_instance=RequestContext(request))
-
 # def confirmation(request, email):
 # 	match_volunteer = get_object_or_404(Volunteer, email==email)
 # 	return render_to_response('volunteer/confirm.html',
@@ -46,7 +45,6 @@ def apply(request):
 	events = Program.object.filter(request['submitDay']).aggregate(date.weekday())
 	return render_to_response('volunteer/selectEvents.html')
 							{'programs':events}
-	
 	
 
 
