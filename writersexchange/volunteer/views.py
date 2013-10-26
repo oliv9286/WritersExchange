@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404
 from django.template import RequestContext
 from django.shortcuts import redirect, render, get_object_or_404, render_to_response
 from django.core.urlresolvers import reverse
@@ -40,7 +41,7 @@ def application_result(request, name):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, name=name)
        try:
-	 result = result.POST['result']
+	 result = request.GET['result']
        except KeyError:
          raise Http404    #TODO display a failure page
        if result == 'Approve':
