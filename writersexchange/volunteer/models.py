@@ -22,4 +22,3 @@ class Volunteer(models.Model):
 		return self.isApproved
 
 
-

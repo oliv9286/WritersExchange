@@ -1,0 +1,48 @@
+<html>
+<head>
+	<title>Application</title>
+</head>
+
+<body>
+	<h1>Application Form</h1>
+
+
+	<form method="post" action="/submitApplication/">
+		{% csrf_token %}
+
+		Name:<input type="text" name="name"/>
+		<br/>
+		Email:<input type="text" name="email"/>
+		<br/>
+		Phone:<input type="text" name="phone"/>
+		<br/>
+		Address:<input type="text" name="address"/>
+		<br/>
+		City:<input type="text" name="city"/>
+		<br/>
+		Province:<input type="text" name="province"/>
+		<br/>
+		Reference#1 Name:<input type="text" name="r1name"/>
+		<br/>
+		Reference#1 Email:<input type="text" name="r1email"/>
+		<br/>
+		Reference#1 Phone:<input type="text" name="r1phone"/>
+		<br/>
+		Reference#2 Name:<input type="text" name="r2name"/>
+		<br/>
+		Reference#2 Email:<input type="text" name="r2email"/>
+		<br/>
+		Reference#2 Phone:<input type="text" name="r2phone"/>
+		<br/>
+		Experience: <input type="text" name="exp"/>
+		<br/>
+		Availability: <input type="text" name="availability"/>
+		<br/>
+
+
+		<input type="submit" value="Submit"/>
+
+	</form>
+
+</body>
+</html>
