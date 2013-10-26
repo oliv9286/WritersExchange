@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<script language="JavaScript">
+function toggle(source) {
+  checkboxes = document.getElementsByName('foo');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+</script>
+
+<form>
+Please select which events you are available for:
+<br>
+<input type="checkbox" onClick="toggle(this)" /> Select All<br/>
+
+	{% if events %}
+		{% for e in events %}
+		<input type="checkbox" value={{e}}>{{e.name}}: {{e.date}} from {{e.startTime}} to {{e.endTime}}</option>
+		{% endfor %}
+	{% endif %}
+<br>
+<br>
+<input type="submit" value="Sign Up" name="signUp">
+</form>
+</html>

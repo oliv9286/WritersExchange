@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<form action="">
+		Please Select a Day or Program:
+		<br>
+		<br>
+		Day:
+		<br>
+		<select name="Day">
+			<option value="0">Monday</option>
+			<option value="1">Tuesday</option>
+			<option value="2">Wednesday</option>
+			<option value="3">Thursday</option>
+			<option value="4">Friday</option>
+			<option value="5">Saturday</option>
+			<option value="6">Sunday</option>
+		</select>
+		<input type="submit" value="Submit" name="submitDay">
+		<br>
+		<br>
+	</form>
+	<form action="">
+		Program:
+		<br>
+		{% if programs %}
+			{% for p in programs %}
+		<select name="Program">
+			<option value={{p}}>{{p.name}}</option>
+		</select>
+			{% endfor %}
+		{% endif %}
+		<input type="submit" value="Submit" name="submitProgram">
+	</form>
+</body>
+</html>
