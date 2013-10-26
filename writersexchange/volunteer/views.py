@@ -36,6 +36,19 @@ def apply(request):
 # 							{'applicant':match_volunteer},
 # 							context_instance=RequestContext(request))
 
+#UNTESTED
+ def get_all_programs(request):
+	programs = Program.object.all().values('name').orderby('name')
+	return render_to_response('volunteer/filterEvents.html')
+							{'programs':programs}
+#UNTESTED							
+ def get_events_on_day(request):
+	events = Program.object.filter(request['submitDay']).aggregate(date.weekday())
+	return render_to_response('volunteer/selectEvents.html')
+							{'programs':events}
+	
+	
+
 
 
 
