@@ -23,4 +23,4 @@ def reject_application(volunteer):
   volunteer.delete()
 
 def name_email_tuple(volunteer):
-  (volunteer.name, volunteer.email)
+  return (volunteer.name, volunteer.email)
