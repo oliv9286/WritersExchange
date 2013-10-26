@@ -20,7 +20,7 @@ class Volunteer(models.Model):
         experience = models.CharField(max_length=2500, null=False)
         availability = models.CharField(max_length=2500, null=False)
 
-        events = ManyToManyField(Event)
+        events = models.ManyToManyField(Event)
 
         def is_approved(self):
                 return self.isApproved
