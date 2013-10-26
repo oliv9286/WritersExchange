@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>Application</title>
+</head>
+
+<body>
+	<h1>Application Form</h1>
+
+
+	<form method="post" action="/apply/">
+		{% csrf_token %}
+		<table>
+		{{ application_form.as_table }}
+		</table>
+
+		<input type="submit" value="Submit"/>
+
+	</form>
+
+</body>
+</html>
