@@ -17,6 +17,7 @@ def apply(request):
 		new_application = form.save()
 		new_application.save()
 		email = form.cleaned_data['email']
+		a = 1
 		volunteer = get_object_or_404(Volunteer, email=email)
                 # Send email to Stacy to inform her of new applicant
                 # TODO: replace '' with message body
@@ -27,7 +28,8 @@ def apply(request):
 		return HttpResponse("Thank you for applying, we will notify you through email when your application has been reviewed.")
 	else: 
 	    return render_to_response('volunteer/apply.html',
-                          {'application_form': form},
+                          {'application_form': form
+                          'a' : a},
                           context_instance=RequestContext(request))
 
 # def confirmation(request, email):
