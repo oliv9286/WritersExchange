@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from volunteer.management import *
 from django.core.mail import send_mail
+from volunteer.we_settings import NOTIFICATION_EMAIL
 
 def index(request):
     return render_to_response('volunteer/index.html')
