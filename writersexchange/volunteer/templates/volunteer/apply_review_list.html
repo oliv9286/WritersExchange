@@ -5,7 +5,11 @@
 <body>
 <table>
   {% for application in applicationTuples %}
-    <tr><td>{{application.0}}</td><td>{{application.1}}</td></tr>
+    <tr><td>
+          <a href="/applications/{{application.0}}/">{{application.0}}</a>
+        </td>
+        <td>{{application.1}}</td>
+   </tr>
   {% endfor %}
 </table>
 </html>
