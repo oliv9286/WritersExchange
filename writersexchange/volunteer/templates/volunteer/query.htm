@@ -3,17 +3,18 @@
 	<title>LiveSearch plugin</title>
 </head>
 <body>
+
 <input type="text" id="search" class="clearfix" name="search" placeholder="Search here!" autofocus="autofocus">
 	<div class="live_search">
-		{% if dataset %}
+		<!-- {% if dataset %}
 			{% for v in dataset %}
-				<p>Name: {{v.name}}, Email: {{v.email}}, Status: {{v.isApproved}}</p>
+				<p>Name: {{v.name}}, Email: {{v.email}}, Approval Status: {{v.isApproved}}</p>
 			{% endfor %}
-		{% endif %}
+		{% endif %} -->
 	</div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="vendor/jquery-1.9.1.min.js"><\/script>')</script>
-<script src="../searchContent/js/jquery.searchContent.js" type="text/javascript"></script>
+<script src="staticfiles/js/jquery.searchContent.js" type="text/javascript"></script>
 <script>
 	$('.live_search').searchContent();
 </script>

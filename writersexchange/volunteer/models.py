@@ -21,4 +21,3 @@ class Volunteer(models.Model):
 	def is_approved(self):
 		return self.isApproved
 
-
