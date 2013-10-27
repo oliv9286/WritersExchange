@@ -207,11 +207,25 @@
 
 .prettyCalendar .volunteer {
     display: inline-block;
-    background: url(../img/prettyCalendar-checkmark.png) no-repeat right;
-    background-position: right 8px bottom 5px;
-    background-size: 15px;
-    width: 15px;
     cursor: pointer;
+    float: right;
+    font: bold 13px "Helvetica Neue", Arial;
+    color: #333;
+}
+
+.prettyCalendar .volunteerText {
+    display: inline-block;
+    cursor: pointer;
+    font: bold 13px "Helvetica Neue", Arial;
+}
+
+.prettyCalendar .volunteerIcon {
+    display: inline-block;
+    background: url(../img/prettyCalendar-checkmark.png);
+    margin: 8px 8px 0 2px;
+    background-size: 14px;
+    width: 14px;
+    height: 12px;
 }
 
 .prettyCalendar .add-event {
@@ -398,18 +412,18 @@
 }
 .prettyCalendar .events .event-single p {
     display: inline-block;
-    width: 110px;
+    width: 102px;
     padding: 7px 12px;
     font: bold 13px "Helvetica Neue", Arial;
     margin: 0;
     color: #333;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
+    /*border-bottom: 1px solid rgba(0,0,0,0.3);*/
 }
 .prettyCalendar .events .event-single p a {
     color: #333;
 }
 .prettyCalendar .events .event-single .details {
-    border-top: 1px solid rgba(255,255,255,0.4);
+    border-top: 1px solid rgba(0,0,0,0.3);
     padding: 5px 10px;
     overflow: hidden;
 }
