@@ -21,6 +21,28 @@ $(function () {
             Event = 'Event(s)';
 
             XHRresponse = {"count": 7, "dates": [1, 2, 3, 7, 15, 21, 24]};
+            JSONevents =    {
+                                event0: {startTime: {hour:12, minute:30},   
+                                        endTime: {hour:14, minute:0},
+                                        name:"MyEvent",
+                                        description:""
+                                        //id
+                                    },
+                                    
+                                event1: {startTime: {hour:8, minute:30},
+                                        endTime: {hour:20, minute:15},
+                                        name:"MyEvent1",
+                                        description:""
+                                        //id
+                                    },
+                                    
+                                event2: {startTime: {hour:2, minute:30},
+                                        endTime: {hour:20, minute:15},
+                                        name:"MyEvent2",
+                                        description:""
+                                        //id
+                                    }
+                                };
             
             var $this = $(this);
             var div = function (e, classN) {
@@ -175,14 +197,46 @@ $(function () {
                 }
                 $.ajax({
                     type: 'GET',
-                    //url: "/events/" + realMonth + "/" + year + "/",
+                    url: "/events/" + date[1] + "/" + date[2] + "/",
                     success: function(){
-                        // console.log('Success!');
+                        console.log('Success!');
                     },
                     error: function() {
-                        // console.log(XHRresponse);
+                        console.log('Error!');
                     }
                 });
+            }
+
+            function dispatchEvent(eventSingle0, event){        
+                var e0 = JSON.parse(JSON.stringify(event));
+                var e0start = JSON.parse(JSON.stringify(e0.startTime));
+                var e0startOut = e0start.hour.toString().concat(':').concat(e0start.minute.toString());
+                //var e0end = JSON.parse(JSON.stringify(e0.endTime));
+                //e0endOut = e0end.hour.toString().concat(':').concat(e0end.minute.toString());
+                eventSingle0.find('p').text(e0.name) ;
+                eventSingle0.find('.details').find('.clock').text(e0startOut) ;
+                $this.find('.add-event').show().find('.events-list').append(createEventHTML(e0.name, e0startOut));
+                // $this.find('.events-list').append(createEventHTML(e0.name, e0startOut));
+            }
+
+            function createEventHTML(title, time){
+                var dataId = parseInt($this.find('.total-bar b').text());
+                
+                eventHTML = (
+                    div('div','event-single').attr('data-id', dataId).append(
+                        div('p','').text(title),
+                        div('div', 'volunteer').append(
+                            div('div', 'volunteerText').text('Volunteer?'),
+                            div('div', 'volunteerIcon')
+                        ),
+                        div('div','details').append(
+                            div('div', 'clock').text(time),
+                            div('div', 'erase')
+                        )
+                    )
+                );
+                dataId++;
+                return(eventHTML);
             }
 
             var arrows = new Array ($this.find('.prv-m'), $this.find('.nxt-m'));
@@ -244,15 +298,19 @@ $(function () {
             });
             
             $this.on('click', '.volunteer', function(){
+                var self = $(this);
+                console.log($(this).find('.volunteerText').text());
                 $.ajax({
                     type: 'POST',
                     // data: eventId,//ID OF EVENT, NEEDS TO BE PROVIDED
-                    // url: "/events/signup/",
+                    url: "/events/signup/",
                     success: function(){
-                        $('.volunteer').text('Volunteered!');
+                        self.find('.volunteerText').text('Volunteering!');
+                        console.log('Success!');
                     },
                     error: function() {
-                        $('.volunteer').text('Problem occured.');
+                        self.find('.volunteerText').text('Problem occured.');
+                        console.log('Success!');
                     }
                 });
             });
@@ -262,8 +320,16 @@ $(function () {
                 $this.find('.events .event-single').remove();
                 prevAddEvent();
                 $(this).addClass('selected').css({'background-color': settings.color});
+                var JSONarray = [] ;
+                $.each(JSONevents, function(){
+                    var e0 = JSON.parse(JSON.stringify(this));
+                    JSONarray.push(e0);
+                });
+                $.each(JSONarray, function(index, dispatchedEvent){
+                    dispatchEvent(eventSingle,dispatchedEvent);
+                });
                 $this.children('.prettyCalendar-wood, .wood-bottom').animate({width : '+=300px' }, 200, function() {
-                    $this.find('.add-event').show().find('.events-list').html(eventSingle.clone())
+                    //$this.find('.add-event').show().find('.events-list').html(eventSingle.clone())
                     $this.find('.add-new input').select();
                     calcTotalDayAgain();
                     calcScroll();
@@ -315,7 +381,10 @@ $(function () {
                 $this.find('.day.this-month.selected').prepend(
                     div('div','event-single').attr('data-id', dataId).append(
                         div('p','').text(title),
-                        div('p', 'volunteer').text('Volunteer?'),
+                        div('div', 'volunteer').append(
+                            div('div', 'volunteerText').text('Volunteer?'),
+                            div('div', 'volunteerIcon')
+                        ),
                         div('div','details').append(
                             div('div', 'clock').text(time),
                             div('div', 'erase')

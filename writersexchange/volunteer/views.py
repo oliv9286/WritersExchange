@@ -288,7 +288,7 @@ def add_event(request):
         evt.startTime = startDay
         evt.endTime = endDay
         evt.date = day
-        evt.name = program_for_name(prog)
+        evt.name = program_for_name(name)
         evt.save()
         success_info = {'success_msg':'Event created.'} 
         success_info.update(csrf(request))
