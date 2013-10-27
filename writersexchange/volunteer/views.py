@@ -146,9 +146,25 @@ def signup(request):
 def volunteer_list(request):
 	if admin_is_logged_in():
 		volunteerList = Volunteer.objects.all()
-		return volunteerList
-		render_to_response('volunteer/volunteerList.html',
-                      {'volunteerTuples': volunteerList},
+		fieldNames = [x[0] for x in generate_field_list(volunteerList[0])]
+		fieldValues = [[x[1] for x in generate_field_list(v)] for v in volunteerList]
+		return render_to_response('volunteer/volunteerList.html',
+                      {'header_list': fieldNames, 'data_table':fieldValues},
                       context_instance=RequestContext(request))
 	else:
 		return login_redirect(request)
+
+def volunteer_info(request, id):
+	if admin_is_logged_in():
+		volunteer =  get_object_or_404(Volunteer, id=id)
+    	values = {'name': volunteer.name, 'email': volunteer.email, 'phoneNum': volunteer.phone, 'address': volunteer.address, 
+    	'refName1': volunteer.reference1name, 'refPhone1': volunteer.reference1phone, 'refName2': volunteer.reference2name, 
+    	'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience}
+    	return render_to_response('volunteer/volInfo.html', values, 
+    		context_instance=RequestContext(request))
+
+def add_event(request):
+    if admin_is_logged_in():
+        return render_to_response('volunteer/addEvents.html', context_instance=RequestContext(request))
+    else:
+        return login_redirect(request)

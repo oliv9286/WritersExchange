@@ -9,14 +9,14 @@
 	<table>
 	<tr>
 		{% for header in header_list %}
-		<th> header </th>
+		<td><b> {{header}} </b></td>
 		{% endfor %}
 	</tr>
 
 	{% for volunteer_data in data_table %}
 		<tr>
 		{% for item in volunteer_data %}
-			<td> item </td>	
+			<td> {{item}} </td>	
 		{% endfor %}
 		</tr>
 	{% endfor %}	
