@@ -54,7 +54,7 @@ def apply(request):
                     context_instance=RequestContext(request))
 
 # generates a list of data
-@permission_required("volunteer.admin")
+@login_required
 def query(request):
 
 	volunteer = Volunteer.objects.all()
