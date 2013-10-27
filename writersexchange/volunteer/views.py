@@ -54,7 +54,7 @@ def apply(request):
                     context_instance=RequestContext(request))
 
 # generates a list of data
-@login_required
+@permission_required("volunteer.admin")
 def query(request):
 
 	volunteer = Volunteer.objects.all()
@@ -153,6 +153,8 @@ def signup(request):
         form = UserForm(request.POST)
 
         if form.is_valid():
+
+            
             user = User.objects.create_user(username=form.cleaned_data['username'], password = form.cleaned_data['password'], \
               email=form.cleaned_data['email'], first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'])
             

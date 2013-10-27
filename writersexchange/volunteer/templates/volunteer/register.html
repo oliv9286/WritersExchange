@@ -8,9 +8,6 @@
         {% if form.username.errors %}<p class="error">{{ form.username.errors }}</p>{% endif %}
         <p><label>Username:</label></p>
         <p>{{ form.username }}</p>
-        {% if message %}
-        	<p class="error">{{message}}</p>
-        {% endif %}
 
         {% if form.password.errors %}<p class="error">{{ form.password.errors }}</p>{% endif %}
         <p><label>Password:</label></p>
