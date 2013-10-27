@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events), #json
     url(r'^events/(\d{4})/(\d+)/', views.month_events), #json
     url(r'^events/signup/', views.event_signup), #json
-    url(r'^volunteers/(\d+)/', views.volunteer_info),
+    url(r'^volunteers/(\d+)/', views.volunteer_info, name="profile"),
     url(r'^events/create/', views.add_event),
     url(r'^events/new/', views.add_event_endpoint), #json
     url(r'^events/info/(\d+)/', views.event_info),
