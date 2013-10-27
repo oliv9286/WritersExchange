@@ -2,7 +2,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from django.template import RequestContext
-from django.shortcuts import redirect, render, get_object_or_404, render_to_response
+from django.shortcuts import redirect, render,  get_object_or_404, render_to_response
 from django.core.urlresolvers import reverse
 from volunteer.models import Volunteer, Event, Program
 from volunteer.forms import ApplicationForm, UserForm
@@ -111,13 +111,15 @@ def application_result(request, uid):
 @login_required
 def profile(request):
   user = request.user
-  volunteer_profile = get_object_or_404(Volunteer, email=user.email)
+  volunteer_profile = Volunteer.objects.get(email=user.email)
+  fields = [x[0] for x in generate_field_list(volunteer_profile)]
+  values = [x[1] for x in generate_field_list(volunteer_profile)]
   #if user's profile does not yet exist we should force them to direct to the application page
 
   if (not volunteer_profile):
     return redirect('apply')
 
-  return render_to_response("volunteer/profile.html", {"profile":volunteer_profile},
+  return render_to_response("volunteer/profile.html", {"profile":volunteer_profile, "fields":fields, "values":values},
                             context_instance=RequestContext(request))
 
 @login_required
