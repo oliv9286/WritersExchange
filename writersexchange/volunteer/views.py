@@ -254,3 +254,6 @@ def add_event(request):
         success_info = {'success_msg':'Event created.'} 
         success_info.update(csrf(request))
         return render_to_response('volunteer/addEvents.html', success_info, context_instance=RequestContext(request))
+def logout_page(request):
+    logout(request)
+    return HttpRedirectResponse('/')
