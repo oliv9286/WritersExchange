@@ -1,17 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="/" method="post">
+<form method="post" action="">
 {% csrf_token %}
 {% if form.errors %}<p>Please correct the following fields:</p>{% endif %}
 
         {% if form.username.errors %}<p class="error">{{ form.username.errors }}</p>{% endif %}
-        <p><label for="username"{% if form.username.errors %} class="error"{% endif %}>Username:</label></p>
+        <p><label>Username:</label></p>
         <p>{{ form.username }}</p>
+        {% if message %}
+        	{{message}}
+        {% endif %}
 
         {% if form.password.errors %}<p class="error">{{ form.password.errors }}</p>{% endif %}
-        <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
+        <p><label>Password:</label></p>
         <p>{{ form.password }}</p>
+
+        {% if form.email.errors %}<p class="error">{{ form.email.errors }}</p>{% endif %}
+        <p><label>Email:</label></p>
+        <p>{{ form.email }}</p>
+
+
+        {% if form.firstname.errors %}<p class="error">{{ form.firstname.errors }}</p>{% endif %}
+        <p><label>First Name:</label></p>
+        <p>{{ form.firstname }}</p>
+
+
+        {% if form.lastname.errors %}<p class="error">{{ form.lastname.errors }}</p>{% endif %}
+        <p><label>Last Name:</label></p>
+        <p>{{ form.lastname }}</p>
+
+
 
         
 <p><input type="submit" alt="register" /></p>
