@@ -199,7 +199,7 @@ $(function () {
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        return error;
                     }
                 });
             }
@@ -296,24 +296,23 @@ $(function () {
             
             $this.on('click', '.volunteer', function(){
                 var self = $(this);
-                console.log(self.find('.volunteerText').text());
-				console.log(self.parent().attr('data-eventid'));
                 $.ajax({
                     type: 'GET',
                     data: self.parent().attr('data-eventid'),
                     url: "/events/signup/",
                     success: function(data){
                         self.find('.volunteerText').text('Volunteering!');
-						console.log(data);
-                        console.log('Success!');
+						return data;
                     },
-                    error: function() {
+                    error: function(error) {
                         self.find('.volunteerText').text('Problem occured.');
+						return error;
                     }
                 });
             });
 
             $this.on('click', '.this-month', function () {
+				$('.add-new').css('display','none');
                 var eventSingle = $(this).find('.event-single')
                 $this.find('.events .event-single').remove();
                 prevAddEvent();
@@ -338,7 +337,7 @@ $(function () {
                 
                     },
                     error: function(error) {
-                        console.log(error);
+                        return error;
                     }
                 });
                 $this.children('.prettyCalendar-wood, .wood-bottom').animate({width : '+=300px' }, 200, function() {
