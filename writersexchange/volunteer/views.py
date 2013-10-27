@@ -25,6 +25,9 @@ def index(request):
 @login_required
 def calendar(request):
     return render_to_response('volunteer/prettyCalendar.htm')
+def links(request):
+    return render_to_response('volunteer/central_link.html')
+
 @login_required
 def apply(request):
   form = request.POST
