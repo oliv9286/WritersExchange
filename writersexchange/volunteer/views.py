@@ -39,7 +39,7 @@ def apply(request):
                           {'application_form': form},
                           context_instance=RequestContext(request))
 # generates a list of data
-@login_required
+
 def query(request):
 
 	volunteer = Volunteer.objects.all()
