@@ -25,14 +25,19 @@ urlpatterns = patterns('',
     url(r'^login/success/', views.signin, name="signinresult"),
     url(r'^signup/', views.signup, name="signup"),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^application_result/(\d+)/', views.application_result, name="application-result"),
-    url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events),
-    url(r'^events/(\d{4})/(\d+)/', views.month_events),
-    url(r'^events/signup/', views.event_signup),
-    url(r'^volunteers/(\d+)/', views.volunteer_info, name="profile"),
+    url(r'^applications/(\d+)/', views.application_review, name="applications"),
+    url(r'^application_result/(\d+)/', views.application_result),
+    url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events), #json
+    url(r'^events/(\d{4})/(\d+)/', views.month_events), #json
+    url(r'^events/signup/', views.event_signup), #json
+    url(r'^volunteers/(\d+)/', views.volunteer_info),
     url(r'^events/create/', views.add_event),
+    url(r'^events/new/', views.add_event_endpoint), #json
+    url(r'^events/info/(\d+)/', views.event_info),
     url(r'^applications/', views.volunteer_list),
-    url(r'^accounts/profile/', views.profile, name="accountprofile"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login'}),
+    url(r'^programs/(\d+)/', views.program_events),
+    url(r'^programs/json/', views.program_list), #json
+    url(r'^accounts/profile/', views.profile, name="accountprofile")
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
