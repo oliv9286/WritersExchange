@@ -1,58 +1,53 @@
+
+
+{% load staticfiles %}
+{% load url from future %}
 <!DOCTYPE html>
 <html>
 <head>
 	<title>LiveSearch plugin</title>
+	<link rel="stylesheet" href={% static "css/application.css" %} type="text/css">
 </head>
 <body>
 
 
-{% load static %}
-
 <input type="text" id="search" class="clearfix" name="search" placeholder="Search here!" autofocus="autofocus">
+
+	<form method="get" action="getEmail/">
+		<input type="submit" value="Email All">
+	</form>
+
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Phone</th>
+			<th>Approval Status</th>
+		</tr>
+	</table>
 	<div class="live_search">
 		{% if dataset %}
 			{% for v in dataset %}
-				<p>Name: {{v.name}}, Email: {{v.email}}, Status: {{v.isApproved}}</p>
+
+				{% if v.isApproved == True %}
+					<a href={% url 'profile' v.id %}>{{v.name}}   {{v.email}}   {{v.phone}}   <td>No</td></a>
+				{% else %}
+					<a href={% url 'profile' v.id %}>{{v.name}}   {{v.email}}   {{v.phone}}   <td>Yes</td></a>
+				{% endif %}
+
+			<br/>
 			{% endfor %}
 		{% endif %}
+
+	
 
 	</div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="vendor/jquery-1.9.1.min.js"><\/script>')</script>
 <!-- <script src="jquery.searchContent.js" type="text/javascript"></script> -->
 
+<script src={% static "jquery.searchContent.js" %}></script>
 
-<script type="text/javascript">
-(function($) {
-	$.fn.searchContent = function(options) {
-		'use strict';
-
-		var settings = $.extend({}, $.fn.searchContent.defaults, options);
-		var $searchTarget = $(this);
-		var $searchInput = $(settings.searchInput);
-		
-		search($searchTarget, $searchInput);
-		return this; // Return jQuery object for chaining
-	};
-
-	function search(searchTarget, searchInput) {
-		var items = searchTarget.children();
-
-		searchInput.keyup(function(){
-			var val = $.trim(searchInput.val()).replace(/ +/g, ' ').toLowerCase();
-			items.show().filter(function() {
-				var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-				return !~text.indexOf(val);
-			}).hide();
-		});
-	}
-
-	$.fn.searchContent.defaults = {
-		searchInput: '#search'
-	}
-})(jQuery);
-
-</script>
 <script>
 	$('.live_search').searchContent();
 </script>

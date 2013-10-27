@@ -40,7 +40,8 @@ def apply(request):
     message = "To view the application, go to: " + link
     send_mail('Writer\'s Exchange Volunteer Application', message, 'from@example.com', [NOTIFICATION_EMAIL], fail_silently=False)
 
-    return HttpResponse("Success!")
+    success_msg = "Thank you for your application! We will notify you about your application status soon."
+    return render_to_response('volunteer/apply.html', {'message': success_msg})
   else:
     return render_to_response('volunteer/apply.html',
                     {'application_form': form},
@@ -189,7 +190,7 @@ def volunteer_list(request):
 		volunteerList = Volunteer.objects.all()
 		fieldNames = [x[0] for x in generate_field_list(volunteerList[0])]
 		fieldValues = [[x[1] for x in generate_field_list(v)] for v in volunteerList]
-		return render_to_response('volunteer/volunteerList.html',
+		return render_to_response('volunteer/searchContent.htm',
                       {'header_list': fieldNames, 'data_table':fieldValues},
                       context_instance=RequestContext(request))
 	else:

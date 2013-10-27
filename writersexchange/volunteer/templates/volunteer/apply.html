@@ -7,6 +7,11 @@
 </head>
 <body>
 <div id="application">
+	{% if message %}
+		{{message}}
+		
+	{% else %}
+
 	<form id="application-form" method="post">
  {% csrf_token %}
 
@@ -128,6 +133,8 @@ $(document).ready(function () {
     });
 });
 </script>
+
+	{% endif %}
 <!--[if lt IE 9]>
 	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 <![endif]-->

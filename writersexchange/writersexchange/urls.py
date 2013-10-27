@@ -30,9 +30,9 @@ urlpatterns = patterns('',
     url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events),
     url(r'^events/(\d{4})/(\d+)/', views.month_events),
     url(r'^events/signup/', views.event_signup),
-    url(r'^volunteers/(\d+)/', views.volunteer_info),
+    url(r'^volunteers/(\d+)/', views.volunteer_info, name="profile"),
     url(r'^events/create/', views.add_event),
     url(r'^applications/', views.volunteer_list),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login'})
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login'}),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

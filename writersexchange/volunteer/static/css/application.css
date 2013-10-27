@@ -12,6 +12,8 @@ body, input, textarea {
 	line-height: 1.625;
 }
 
+
+
 .clearfix {
   *zoom: 1;
   &:before,
@@ -60,7 +62,7 @@ body, input, textarea {
 	font-size: 14px;
 }
 
-#application-form label.error {
+#application-form label.error, .error {
 	color: red;
 	font-size: 12px;
 	font-weight: normal;
