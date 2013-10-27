@@ -85,7 +85,7 @@ def signin(request):
 	        # Return an 'invalid login' error message.
 	        return HttpResponse('invalid login')
 
-@permission_required("volunteer.admin")
+# @permission_required("volunteer.admin")
 def application_review(request,uid):
     if admin_is_logged_in():
         volunteer = get_object_or_404(Volunteer, id=uid)
@@ -99,7 +99,7 @@ def application_review(request,uid):
     else:
         return login_redirect(request)
 
-@permission_required("volunteer.admin")
+# @permission_required("volunteer.admin")
 def application_result(request, uid):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, id=uid)
