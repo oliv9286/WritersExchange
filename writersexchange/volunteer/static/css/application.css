@@ -10,6 +10,7 @@ body, input, textarea {
 	color: #373737;
 	font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 1.625;
+	width: 176px;
 }
 
 table.applicants .row,
@@ -18,7 +19,25 @@ table.applicants .tableHeader {
 	text-align: center;
 }
 
+.nav{
+	margin: 5px 0;
+}
 
+.nav a {
+	width: 200px;
+	display: block;
+}
+
+body {
+	width: 100%;
+}
+
+#logout {
+	float: right;
+	right: 0;
+	top: 0;
+	position: absolute;
+}
 .clearfix {
   *zoom: 1;
   &:before,
@@ -37,6 +56,7 @@ table.applicants .tableHeader {
 }
 
 #application-form .multi {
+	vertical-align: top;
 	display: inline-block;
 }
 
@@ -67,12 +87,14 @@ table.applicants .tableHeader {
 	font-size: 14px;
 }
 
-#application-form label.error, .error {
+#application-form label.error {
 	color: red;
 	font-size: 12px;
 	font-weight: normal;
 	margin: 5px 0;
 	font-style: italic;
+	width: 176px;
+
 }
 
 input, textarea {

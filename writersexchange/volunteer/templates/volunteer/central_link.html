@@ -1,3 +1,6 @@
+
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,38 +10,25 @@ Central Link Page
 <br>
 </head>
 <body>
-<form method="get" action="/signup/">
-	<input type="submit" value="Sign Up">
-</form>
-<br>
-<br>
-<form method="get" action="/login/">
-	<input type="submit" value="Login">
-</form><br>
-<br>
-<form method="get" action="/apply/">
-	<input type="submit" value="Application Form">
-</form>
-<br>
-<br>
-<form method="get" action="/admin/">
-	<input type="submit" value="Site Administration">
-</form><br>
-<br>
-<form method="get" action="/applications/">
-	<input type="submit" value="Volunteer Applications">
-</form><br>
-<br>
-<form method="get" action="/events/create/">
-	<input type="submit" value="Create Event">
-</form><br>
-<br>
-<form method="get" action="/calendar/">
-	<input type="submit" value="Calendar">
-</form>
-<br><br>
-<form method="get" action="/logout/">
-	<input type="submit" value="Logout">
-</form>
+
+<div class="nav">
+
+<a href="/login/">Sign Up</a>
+
+<a href="/apply/">Apply</a>
+
+<a href="/admin/">Administration</a>
+
+<a href="/applications/">Vounteer Application</a>
+
+<a href="/events/create/">Create Event</a>
+
+<a href="/calendar/">Calendar</a>
+
+<a href="/logout/">Logout</a>
+
+</div>
 </body>
 </html>
+
+{% endblock %}

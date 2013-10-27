@@ -33,6 +33,8 @@ body, input, textarea {
 }
 
 #application-form .multi {
+
+	vertical-align: top;
 	display: inline-block;
 }
 
