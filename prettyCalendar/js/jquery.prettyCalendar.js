@@ -19,13 +19,14 @@ $(function () {
             AllDay = 'All Day';
             TotalEvents = 'Total Events in This Month: ';
             Event = 'Event(s)';
-            
+
+            XHRresponse = {"count": 7, "dates": [1, 2, 3, 7, 15, 21, 24]};
             
             var $this = $(this);
             var div = function (e, classN) {
                 return $(document.createElement(e)).addClass(classN);
             };
-            
+
             var clockHour = [];
             var clockMin = [];
             for (var i=0;i<24;i++ ){
@@ -142,13 +143,13 @@ $(function () {
                     $(this).attr('data-id', i);
                     $this.find('.this-month[data-date="' + $(this).attr('data-date') + '"]').append(
                         div('div','event-single').attr('data-id', i).append(
-                            div('p','').text($(this).attr('data-title')),
+                            div('p','').text($(this).attr('data-title'))
+                            ),
                             div('div','details').append(
                                 div('div', 'clock').text($(this).attr('data-time')),
                                 div('div', 'erase')
                             )
-                        )
-                    );
+                        );
                     $this.find('.day').has('.event-single').addClass('have-event').prepend(div('i',''));
                 });
                 
@@ -157,7 +158,33 @@ $(function () {
             }
             
             calcMonth();
-            
+            queryEventsYM(year,month);
+            function queryEventsYM(year,month) {
+                $('.total-bar b').text(XHRresponse.count);
+                for(i = 0; i < XHRresponse.dates.length; i++) {
+                    var match = $('.day.this-month').filter(function(){
+                        var date = $(this).attr("data-date").split("/");
+                        var day = date[0];
+                        var month = date[1];
+                        if(date[0] == XHRresponse.dates[i] && date[1] == month){
+                            return true;
+                        }
+                    });
+                    match.addClass('have-event').prepend(div('i','')).append(div('div','event-single'));
+                    // calcTotalDayAgain
+                }
+                $.ajax({
+                    type: 'GET',
+                    //url: "/events/" + realMonth + "/" + year + "/",
+                    success: function(){
+                        // console.log('Success!');
+                    },
+                    error: function() {
+                        // console.log(XHRresponse);
+                    }
+                });
+            }
+
             var arrows = new Array ($this.find('.prv-m'), $this.find('.nxt-m'));
             var dropdown = new Array ($this.find('.add-time .select span'), $this.find('.add-time .select .dropdown .option'), $this.find('.add-time .select'));
             var allDay = new Array ('.all-day fieldset[data-type="disabled"]', '.all-day fieldset[data-type="enabled"]');
@@ -200,6 +227,7 @@ $(function () {
                     month++;   
                 }
                 calcMonth();
+                queryEventsYM(year,month);
                 prevAddEvent();
             });
             arrows[0].on('click', function () {
@@ -211,9 +239,24 @@ $(function () {
                     month--;   
                 }
                 calcMonth();
+                queryEventsYM(year,month);
                 prevAddEvent();
             });
             
+            $this.on('click', '.volunteer', function(){
+                $.ajax({
+                    type: 'POST',
+                    // data: eventId,//ID OF EVENT, NEEDS TO BE PROVIDED
+                    // url: "/events/signup/",
+                    success: function(){
+                        $('.volunteer').text('Volunteered!');
+                    },
+                    error: function() {
+                        $('.volunteer').text('Problem occured.');
+                    }
+                });
+            });
+
             $this.on('click', '.this-month', function () {
                 var eventSingle = $(this).find('.event-single')
                 $this.find('.events .event-single').remove();
@@ -252,7 +295,7 @@ $(function () {
                 $(this).removeAttr('data-type').attr('data-type', 'disabled').children('.check').children().css('background-color', 'transparent');
                 $(this).parents('.all-day').prev('.add-time').css('opacity', '1').children('.disabled').css('z-index', '-1');
             });
-            
+
             var dataId = parseInt($this.find('.total-bar b').text());
             $this.find('.submit').on('click', function(){
                 var title = $(this).prev('input').val();
@@ -272,6 +315,7 @@ $(function () {
                 $this.find('.day.this-month.selected').prepend(
                     div('div','event-single').attr('data-id', dataId).append(
                         div('p','').text(title),
+                        div('p', 'volunteer').text('Volunteer?'),
                         div('div','details').append(
                             div('div', 'clock').text(time),
                             div('div', 'erase')
