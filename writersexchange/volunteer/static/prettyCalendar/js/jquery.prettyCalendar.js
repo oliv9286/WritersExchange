@@ -429,9 +429,4 @@ $(function () {
         };
 
     }(jQuery));
-
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 4eb2fa638af3a9a5da2bb15a40f2b948bf4e896f
