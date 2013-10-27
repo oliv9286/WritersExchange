@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from volunteer.we_settings import NOTIFICATION_EMAIL
-import calendar
+from calendar import monthrange
 from volunteer.json_conversion import *
 import json
 from django.core.context_processors import csrf
@@ -182,7 +182,7 @@ def signup(request):
 def month_events(request, year, month):
     year = int(year)
     month = int(month)
-    endDateOfMonth = calendar.monthrange(year, month)[1]
+    endDateOfMonth = monthrange(year, month)[1]
     startDay = datetime.date(year, month, 1)
     endDay = datetime.date(year, month, endDateOfMonth)
     events = Event.objects.filter(date__gte=startDay, date__lte=endDay)
