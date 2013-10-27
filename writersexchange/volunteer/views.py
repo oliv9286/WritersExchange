@@ -167,8 +167,9 @@ def signup(request):
         else:
             return render_to_response('volunteer/register.html', {'form': form}, context_instance=RequestContext(request))
       except IntegrityError, e:
-        return render_to_response("volunteer/register.html", {'form':UserForm(),
-          "message":"this username has already been taken."})
+        return render_to_response("volunteer/register.html", {'form':UserForm(), 
+                "message":"this username has already been taken."},
+               context_instance=RequestContext(request))
     else:
             ''' user is not submitting the form, show them a blank registration form '''
             form = UserForm()
