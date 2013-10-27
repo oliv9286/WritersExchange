@@ -302,18 +302,19 @@ $(function () {
                     url: "/events/signup/",
                     success: function(data){
                         self.find('.volunteerText').text('Volunteering!');
-						return data;
+                        return data;
                     },
                     error: function(error) {
                         self.find('.volunteerText').text('Problem occured.');
-						return error;
+                        return error;
                     }
                 });
             });
 
             $this.on('click', '.this-month', function () {
-				$('.add-new').css('display','none');
-                var eventSingle = $(this).find('.event-single')
+                $('.add-new').css('display','none');
+                var eventSingle = $(this).find('.event-single');
+                eventSingle.find('.erase').remove();
                 $this.find('.events .event-single').remove();
                 prevAddEvent();
                 $(this).addClass('selected').css({'background-color': settings.color});
@@ -429,4 +430,8 @@ $(function () {
 
     }(jQuery));
 
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 4eb2fa638af3a9a5da2bb15a40f2b948bf4e896f
