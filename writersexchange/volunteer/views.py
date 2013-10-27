@@ -14,8 +14,9 @@ from django.core.mail import send_mail
 from volunteer.we_settings import NOTIFICATION_EMAIL
 import calendar
 from volunteer.json_conversion import *
-import datetime
 import json
+from django.core.context_processors import csrf
+import datetime
 
 def index(request):
     return render_to_response('volunteer/index.html')
@@ -147,7 +148,6 @@ def signup(request):
                 return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
 
 def month_events(request, year, month):
-    #for end of month filtering
     year = int(year)
     month = int(month)
     endDateOfMonth = calendar.monthrange(year, month)[1]
@@ -179,3 +179,74 @@ def event_signup(request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=400)
+
+def volunteer_list(request):
+	if admin_is_logged_in():
+		volunteerList = Volunteer.objects.all()
+		fieldNames = [x[0] for x in generate_field_list(volunteerList[0])]
+		fieldValues = [[x[1] for x in generate_field_list(v)] for v in volunteerList]
+		return render_to_response('volunteer/volunteerList.html',
+                      {'header_list': fieldNames, 'data_table':fieldValues},
+                      context_instance=RequestContext(request))
+	else:
+		return login_redirect(request)
+
+def volunteer_info(request, id):
+	if admin_is_logged_in():
+		volunteer =  get_object_or_404(Volunteer, id=id)
+    	values = {'name': volunteer.name, 'email': volunteer.email, 'phoneNum': volunteer.phone, 'address': volunteer.address, 
+    	'refName1': volunteer.reference1name, 'refPhone1': volunteer.reference1phone, 'refName2': volunteer.reference2name, 
+    	'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience}
+    	return render_to_response('volunteer/volInfo.html', values, 
+    		context_instance=RequestContext(request))
+
+def add_event(request):
+    def err_with_csrf(msg):
+        val_dict = {'err_msg':msg}
+        val_dict.update(csrf(request))
+        return val_dict
+
+    if request.method != "POST":
+        #Send client to event creation page
+        if admin_is_logged_in():
+            tup = {}
+            tup.update(csrf(request))
+            return render_to_response('volunteer/addEvents.html', tup, context_instance=RequestContext(request))
+        else:
+            return login_redirect(request)
+    else:
+        try:
+            print request.POST['year']
+            #read all values given in form
+            name = request.POST['name']
+            month = int(request.POST['month'])
+            day = int(request.POST['day'])
+            year = int(request.POST['year'])
+            startHour = int(request.POST['sHour'])
+            startMinute = int(request.POST['sMinute'])
+            endHour = int(request.POST['fHour'])
+            endMinute = int(request.POST['fMinute'])
+            day = datetime.date(year, month, day)
+            startDay = datetime.time(startHour, startMinute)
+            endDay = datetime.time(endHour, endMinute)
+        except KeyError:
+            #something didn't exist in POST
+            return render_to_response('volunteer/addEvents.html', err_with_csrf('This error should not have happened: did you change addEvents.html or views.py?'), context_instance=RequestContext(request))
+        except ValueError as ve:
+            return render_to_response('volunteer/addEvents.html', err_with_csrf('Something is formatted wrong: could not parse text fields.'), context_instance=RequestContext(request))
+        evt = Event()
+        evt.startTime = startDay
+        evt.endTime = endDay
+        evt.date = day
+        programs = Program.objects.filter(name__exact=name)
+        if len(programs) == 0:
+            prog = Program()
+            prog.name = name
+            prog.save()
+        else:
+            prog = programs[0]
+        evt.name = prog
+        evt.save()
+        success_info = {'success_msg':'Event created.'} 
+        success_info.update(csrf(request))
+        return render_to_response('volunteer/addEvents.html', success_info, context_instance=RequestContext(request))
