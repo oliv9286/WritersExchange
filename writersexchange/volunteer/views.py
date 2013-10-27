@@ -79,22 +79,22 @@ def signin(request):
 	        return HttpResponse('invalid login')
 
 
-def application_review(request,name):
+def application_review(request,uid):
     if admin_is_logged_in():
-        volunteer = get_object_or_404(Volunteer, name=name)
+        volunteer = get_object_or_404(Volunteer, id=uid)
         fieldList = generate_field_list(volunteer)
         return render_to_response(
                          'volunteer/apply_review.html',
                          {'display_fields':fieldList,
                           'forward_url':
-                          '/application_result/' + name},
+                          '/application_result/' + str(uid)},
                          context_instance=RequestContext(request))
     else:
         return login_redirect(request)
 
-def application_result(request, name):
+def application_result(request, uid):
     if admin_is_logged_in():
-       volunteer = get_object_or_404(Volunteer, name=name)
+       volunteer = get_object_or_404(Volunteer, id=uid)
        try:
 	 result = request.GET['result']
        except KeyError:
