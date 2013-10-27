@@ -94,7 +94,7 @@ def application_review(request,uid):
                          'volunteer/apply_review.html',
                          {'display_fields':fieldList,
                           'forward_url':
-                          '/application_result/' + str(uid)},
+                          '/application_result/' + str(uid) + "/"},
                          context_instance=RequestContext(request))
     else:
         return login_redirect(request)
