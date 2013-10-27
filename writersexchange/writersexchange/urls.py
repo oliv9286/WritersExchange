@@ -40,5 +40,7 @@ urlpatterns = patterns('',
     url(r'^programs/json/', views.program_list), #json
     url(r'^accounts/profile/', views.profile, name="accountprofile"),
     url(r'^action/', views.action, name="action"),
+    url(r'^calendar/', views.calendar, name="calendar")
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

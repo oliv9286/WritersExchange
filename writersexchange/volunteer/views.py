@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from volunteer.we_settings import NOTIFICATION_EMAIL
-import calendar
+from calendar import monthrange
 from volunteer.json_conversion import *
 import json
 from django.core.context_processors import csrf
@@ -22,7 +22,9 @@ import datetime
 
 def index(request):
     return render_to_response('volunteer/index.html')
-
+@login_required
+def calendar(request):
+    return render_to_response('volunteer/prettyCalendar.htm')
 @login_required
 def apply(request):
   form = request.POST
@@ -54,7 +56,7 @@ def apply(request):
                     context_instance=RequestContext(request))
 
 # generates a list of data
-@login_required
+@permission_required("volunteer.admin")
 def query(request):
 
 	volunteer = Volunteer.objects.all()
@@ -122,6 +124,10 @@ def application_result(request, uid):
 
 @login_required
 def profile(request):
+  user = request.user
+  if (user.has_perm("volunteer.admin")):
+    return redirect('query')
+
   return redirect('action')
 
 @login_required
@@ -187,7 +193,7 @@ def signup(request):
 def month_events(request, year, month):
     year = int(year)
     month = int(month)
-    endDateOfMonth = calendar.monthrange(year, month)[1]
+    endDateOfMonth = monthrange(year, month)[1]
     startDay = datetime.date(year, month, 1)
     endDay = datetime.date(year, month, endDateOfMonth)
     events = Event.objects.filter(date__gte=startDay, date__lte=endDay)
@@ -222,8 +228,6 @@ def event_signup(request):
 def volunteer_list(request):
 	if admin_is_logged_in():
 		volunteerList = Volunteer.objects.all()
-		fieldNames = [x[0] for x in generate_field_list(volunteerList[0])]
-		fieldValues = [[x[1] for x in generate_field_list(v)] for v in volunteerList]
 		return render_to_response('volunteer/searchContent.htm',
                       {'dataset':volunteerList},
                       context_instance=RequestContext(request))
@@ -293,7 +297,7 @@ def add_event(request):
         evt.startTime = startDay
         evt.endTime = endDay
         evt.date = day
-        evt.name = program_for_name(prog)
+        evt.name = program_for_name(name)
         evt.save()
         success_info = {'success_msg':'Event created.'} 
         success_info.update(csrf(request))
