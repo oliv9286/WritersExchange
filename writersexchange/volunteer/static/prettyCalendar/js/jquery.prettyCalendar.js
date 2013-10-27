@@ -209,9 +209,8 @@ $(function () {
                 var e0start = JSON.parse(JSON.stringify(e0.startTime));
 				var hour = e0start.hour.toString();
 				var minute = e0start.minute.toString();
-				if(minute.length == 1) {
+				if(minute.length == 1)
 					minute += "0";
-				}
                 var e0startOut = hour.concat(':').concat(minute);
                 //var e0end = JSON.parse(JSON.stringify(e0.endTime));
                 //e0endOut = e0end.hour.toString().concat(':').concat(e0end.minute.toString());
@@ -223,7 +222,7 @@ $(function () {
 
             function createEventHTML(title, time, eventId){
                 var dataId = parseInt($this.find('.total-bar b').text());
-
+                
                 eventHTML = (
                     div('div','event-single').attr('data-id', dataId).attr('data-eventid', eventId).append(
                         div('p','').text(title),
@@ -301,19 +300,17 @@ $(function () {
             
             $this.on('click', '.volunteer', function(){
                 var self = $(this);
-                console.log(self.find('.volunteerText').text());
-				console.log(self.parent().attr('data-eventid'));
                 $.ajax({
                     type: 'GET',
-                    data: self.parent().attr('data-eventid'),
+                    data: self.parent().attr("data-eventid"),
                     url: "/events/signup/",
-                    success: function(data){
+                    success: function(){
                         self.find('.volunteerText').text('Volunteering!');
-						console.log(data);
                         console.log('Success!');
                     },
                     error: function() {
                         self.find('.volunteerText').text('Problem occured.');
+                        console.log('Success!');
                     }
                 });
             });
