@@ -9,7 +9,8 @@
        <label class="application-field">{{item.0}} : {{item.1}}</label>
     </div>
   {% endfor %}
-  <form name="apply_result" method="get" action={{forward_url}}>
+  <form name="apply_result" method="post" action={{forward_url}}>
+    {% csrf_token %}
     <div><input type="submit" name="result" value="Approve"></div>
     <div><input type="submit" name="result" value="Reject"></div>
   </form>
