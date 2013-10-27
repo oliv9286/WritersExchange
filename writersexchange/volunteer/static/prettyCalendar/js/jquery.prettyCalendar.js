@@ -182,27 +182,24 @@ $(function () {
             calcMonth();
             queryEventsYM(year,month);
             function queryEventsYM(year,month) {
-                $('.total-bar b').text(XHRresponse.count);
-                for(i = 0; i < XHRresponse.dates.length; i++) {
-                    var match = $('.day.this-month').filter(function(){
-                        var date = $(this).attr("data-date").split("/");
-                        var day = date[0];
-                        var month = date[1];
-                        if(date[0] == XHRresponse.dates[i] && date[1] == month){
-                            return true;
-                        }
-                    });
-                    match.addClass('have-event').prepend(div('i','')).append(div('div','event-single'));
-                    // calcTotalDayAgain
-                }
                 $.ajax({
                     type: 'GET',
                     url: "/events/" + year + "/" + (month + 1) + "/",
-                    success: function(){
-                        console.log('Success!');
+                    success: function(data){
+                        $('.total-bar b').text(data.count);
+                        for(i = 0; i < data.dates.length; i++) {
+                            var match = $('.day.this-month').filter(function(){
+                                var date = $(this).attr("data-date").split("/");
+                                var day = date[0];
+                                var month = date[1];
+                                if(date[0] == data.dates[i] && date[1] == month)
+                                    return true;
+                            });
+                            match.addClass('have-event').prepend(div('i','')).append(div('div','event-single'));
+                        }
                     },
-                    error: function() {
-                        console.log('Error!');
+                    error: function(error) {
+                        console.log(error);
                     }
                 });
             }
