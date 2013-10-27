@@ -35,8 +35,8 @@ def apply(request):
     new_application.save()
     email = form.get('email')
 
-    domain = request.META['HTTP_POST']
-    link = domain + "/applications/" + str(volunteer.id) + "/"
+    domain = request.META['HTTP_HOST']
+    link = domain + "/applications/" + str(new_application.id) + "/"
     message = "To view the application, go to: " + link
     send_mail('Writer\'s Exchange Volunteer Application', message, 'from@example.com', [NOTIFICATION_EMAIL], fail_silently=False)
 
