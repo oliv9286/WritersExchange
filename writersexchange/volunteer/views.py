@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from volunteer.management import *
 from django.core.mail import send_mail
+from django.db import IntegrityError
+from django.contrib.auth.models import User
 from volunteer.we_settings import NOTIFICATION_EMAIL
 
 def index(request):
@@ -117,26 +119,31 @@ def application_list(request):
 #                             context_instance=RequestContext(request))
 
 def signup(request):
-        if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse("index"))
-        if request.method == 'POST':
-            form = UserForm(request.POST)
-            if form.is_valid():
-                user = User.objects.create_user(username=form.cleaned_data['username'], password = form.cleaned_data['password'], \
-                	email=form.cleaned_data['email'])
-                user.save()
+    if request.method == 'POST':
+      try:
+        form = UserForm(request.POST)
 
-                new_user = authenticate(username=request.POST['username'],
-                                    password=request.POST['password'], email=request.POST['email'])
-                login(request, new_user)
-                return HttpResponseRedirect(reverse("index"))
-            else:
-                return render_to_response('volunteer/register.html', {'form': form}, context_instance=RequestContext(request))
+        if form.is_valid():
+            user = User.objects.create_user(username=form.cleaned_data['username'], password = form.cleaned_data['password'], \
+              email=form.cleaned_data['email'], first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'])
+            
+            user.save()
+
+            new_user = authenticate(username=request.POST['username'],
+                                password=request.POST['password'], email=request.POST['email'])
+            login(request, new_user)
+            return HttpResponseRedirect(reverse("index"))
         else:
-                ''' user is not submitting the form, show them a blank registration form '''
-                form = UserForm()
-                context = {'form': form}
-                return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
+            return render_to_response('volunteer/register.html', {'form': form}, context_instance=RequestContext(request))
+      except IntegrityError, e:
+        return render_to_response("volunteer/register.html", {'form':UserForm(),
+          "message":"this username has already been taken."})
+    else:
+            ''' user is not submitting the form, show them a blank registration form '''
+            form = UserForm()
+            context = {'form': form}
+            return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
+
 
 
 
