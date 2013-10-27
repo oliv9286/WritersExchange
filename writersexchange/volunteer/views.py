@@ -23,7 +23,8 @@ def apply(request):
     reference2name=form.get('ref2name'), reference2email=form.get('ref2email'), reference2phone=form.get('ref2phone'), \
     experience=form.get('id_experience'), availability=form.get('id_availability'))
 
-  if (form.get('email') != None):
+  if (form):
+    
     new_application.save()
     email = form.get('email')
 
