@@ -31,9 +31,9 @@
 			{% for v in dataset %}
 
 				{% if v.isApproved == True %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>Yes</td></a>
+					<a href={% url 'views.profile'  %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>Yes</td></a>
 				{% else %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>No</td></a>
+					<a href={% url 'views.profile' %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>No</td></a>
 				{% endif %}
 
 			<br/>

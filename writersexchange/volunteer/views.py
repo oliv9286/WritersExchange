@@ -217,7 +217,7 @@ def volunteer_list(request):
 		fieldNames = [x[0] for x in generate_field_list(volunteerList[0])]
 		fieldValues = [[x[1] for x in generate_field_list(v)] for v in volunteerList]
 		return render_to_response('volunteer/searchContent.htm',
-                      {'header_list': fieldNames, 'data_table':fieldValues},
+                      {'dataset':volunteerList},
                       context_instance=RequestContext(request))
 	else:
 		return login_redirect(request)
