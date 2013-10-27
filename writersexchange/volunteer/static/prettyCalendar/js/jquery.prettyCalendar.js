@@ -212,15 +212,15 @@ $(function () {
                 //e0endOut = e0end.hour.toString().concat(':').concat(e0end.minute.toString());
                 eventSingle0.find('p').text(e0.name) ;
                 eventSingle0.find('.details').find('.clock').text(e0startOut) ;
-                $this.find('.add-event').show().find('.events-list').append(createEventHTML(e0.name, e0startOut));
+                $this.find('.add-event').show().find('.events-list').append(createEventHTML(e0.name, e0startOut, e0.id));
                 // $this.find('.events-list').append(createEventHTML(e0.name, e0startOut));
             }
 
-            function createEventHTML(title, time){
+            function createEventHTML(title, time, eventId){
                 var dataId = parseInt($this.find('.total-bar b').text());
                 
                 eventHTML = (
-                    div('div','event-single').attr('data-id', dataId).append(
+                    div('div','event-single').attr('data-id', dataId).attr('data-eventid', eventId).append(
                         div('p','').text(title),
                         div('div', 'volunteer').append(
                             div('div', 'volunteerText').text('Volunteer?'),
@@ -296,18 +296,19 @@ $(function () {
             
             $this.on('click', '.volunteer', function(){
                 var self = $(this);
-                console.log($(this).find('.volunteerText').text());
+                console.log(self.find('.volunteerText').text());
+				console.log(self.parent().attr('data-eventid'));
                 $.ajax({
                     type: 'POST',
-                    // data: eventId,//ID OF EVENT, NEEDS TO BE PROVIDED
+                    data: self.parent().attr('data-eventid'),
                     url: "/events/signup/",
-                    success: function(){
+                    success: function(data){
                         self.find('.volunteerText').text('Volunteering!');
+						console.log(data);
                         console.log('Success!');
                     },
                     error: function() {
                         self.find('.volunteerText').text('Problem occured.');
-                        console.log('Success!');
                     }
                 });
             });
@@ -317,13 +318,28 @@ $(function () {
                 $this.find('.events .event-single').remove();
                 prevAddEvent();
                 $(this).addClass('selected').css({'background-color': settings.color});
-                var JSONarray = [] ;
-                $.each(JSONevents, function(){
-                    var e0 = JSON.parse(JSON.stringify(this));
-                    JSONarray.push(e0);
-                });
-                $.each(JSONarray, function(index, dispatchedEvent){
-                    dispatchEvent(eventSingle,dispatchedEvent);
+                var date = $(this).attr("data-date").split("/");
+                var selectedDay = date[0];
+                var selectedMonth = date[1];
+                var selectedYear = date[2];
+                
+                $.ajax({
+                    type: 'GET',
+                    url: "/events/" + selectedYear + "/" + selectedMonth + "/" + selectedDay + "/",
+                    success: function(data){
+                        var JSONarray = [] ;
+                        $.each(data, function(){
+                            var e0 = JSON.parse(JSON.stringify(this));
+                            JSONarray.push(e0);
+                        });
+                        $.each(JSONarray, function(index, dispatchedEvent){
+                            dispatchEvent(eventSingle,dispatchedEvent);
+                        });
+                
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
                 $this.children('.prettyCalendar-wood, .wood-bottom').animate({width : '+=300px' }, 200, function() {
                     //$this.find('.add-event').show().find('.events-list').html(eventSingle.clone())
@@ -415,4 +431,3 @@ $(function () {
     }(jQuery));
 
 });
-
