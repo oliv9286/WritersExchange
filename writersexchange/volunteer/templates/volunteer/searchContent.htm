@@ -13,9 +13,11 @@
 
 <input type="text" id="search" class="clearfix" name="search" placeholder="Search here!" autofocus="autofocus">
 
-	<form method="get" action="getEmail/">
+<!-- 	<form method="get" action="getEmail/">
 		<input type="submit" value="Email All">
-	</form>
+	</form> -->
+
+	<button class="email-all">Email All</button>
 
 	<table class="applicants">
 		<tr>
@@ -28,7 +30,7 @@
 		{% for v in dataset %}
 			<tr>
 				<td class="row"><a href={% url 'profile' v.id %}>{{v.name}}</a></td>
-				<td class="row"><a href={% url 'profile' v.id %}>{{v.email}}</a></td>
+				<td class="row"><span class="email"><a href={% url 'profile' v.id %}>{{v.email}}</a></spam></td>
 				<td class="row"><a href={% url 'profile' v.id %}>{{v.phone}}</a></td>
 				<td class="row"><a href={% url 'profile' v.id %}>{{v.isApproved}}</a></td>
 			</tr>	
@@ -36,19 +38,6 @@
 		</tbody>
 
 	</table>
-<!-- 
-		{% if dataset %}
-			{% for v in dataset %}
-
-					<a href={% url 'profile' v.id %} class="applicant">{{v.name}}  {{v.email}}  {{v.phone}}   {{v.isApproved}}</a>
-
-
-			{% endfor %}
-		{% endif %}
-
-	
-
-	</div> -->
 
 <a href="/"><button>Home</button></a>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -64,7 +53,8 @@
 </script>
 
 <script type="text/javascript">
-	var n = $("br").filter(function() { return $(this).css("display") == "none" })
+	var n = $("tr").filter(function() { return $(this).css("display") == "none" })
+	console.log(n)
 </script>
 
 </body>
