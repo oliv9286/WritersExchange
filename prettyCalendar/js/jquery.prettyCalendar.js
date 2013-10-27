@@ -197,7 +197,7 @@ $(function () {
                 }
                 $.ajax({
                     type: 'GET',
-                    url: "/events/" + realMonth + "/" + year + "/",
+                    url: "/events/" + date[1] + "/" + date[2] + "/",
                     success: function(){
                         console.log('Success!');
                     },
