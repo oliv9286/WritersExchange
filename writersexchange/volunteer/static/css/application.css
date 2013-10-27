@@ -12,7 +12,9 @@ body, input, textarea {
 	line-height: 1.625;
 }
 
-
+.applicant{
+	display: block;
+}
 
 .clearfix {
   *zoom: 1;

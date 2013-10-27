@@ -30,13 +30,9 @@
 		{% if dataset %}
 			{% for v in dataset %}
 
-				{% if v.isApproved == True %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>Yes</td></a>
-				{% else %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>No</td></a>
-				{% endif %}
+					<a href={% url 'profile' v.id %} class="applicant">{{v.name}}  {{v.email}}  {{v.phone}}   {{v.isApproved}}</a>
 
-			<br/>
+
 			{% endfor %}
 		{% endif %}
 

@@ -26,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^signup/', views.signup, name="signup"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^applications/(\d+)/', views.application_review, name="applications"),
-    url(r'^application_result/(\d+)/', views.application_result),
+    url(r'^application_result/(\d+)/', views.application_result, name="application-result"),
     url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events), #json
     url(r'^events/(\d{4})/(\d+)/', views.month_events), #json
     url(r'^events/signup/', views.event_signup), #json
