@@ -171,3 +171,8 @@ LOGGING = {
         },
     }
 }
+
+
+#Url to which users are redirected when they don't have appropriate permissions
+#or are not logged in
+LOGIN_URL = "/login/"

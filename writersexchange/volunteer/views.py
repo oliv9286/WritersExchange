@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from volunteer.models import Volunteer, Event, Program
 from volunteer.forms import ApplicationForm, UserForm
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django import forms
 from volunteer.management import *
 from django.core.mail import send_mail
@@ -78,7 +78,7 @@ def signin(request):
 	        # Return an 'invalid login' error message.
 	        return HttpResponse('invalid login')
 
-
+@permission_required("volunteer.admin")
 def application_review(request,uid):
     if admin_is_logged_in():
         volunteer = get_object_or_404(Volunteer, id=uid)
@@ -92,6 +92,7 @@ def application_review(request,uid):
     else:
         return login_redirect(request)
 
+@permission_required("volunteer.admin")
 def application_result(request, uid):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, id=uid)
@@ -112,6 +113,7 @@ def application_result(request, uid):
     else:
         return login_redirect(request)
 
+@permission_required("volunteer.admin")
 def application_list(request):
     if admin_is_logged_in():
        needingReview = Volunteer.objects.filter(isApproved__exact=False)
@@ -150,7 +152,7 @@ def signup(request):
             context = {'form': form}
             return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
 
-
+@login_required
 def month_events(request, year, month):
     year = int(year)
     month = int(month)
@@ -161,12 +163,14 @@ def month_events(request, year, month):
     jsonMap = events_to_month_info(events)
     return HttpResponse(json.dumps(jsonMap), content_type="application/json")
 
+@login_required
 def day_events(request, year, month, day):
     events = Event.objects.filter(date__year=year, date__month=month,
                                    date__day=day)
     jsonMap = events_to_day_info(events)
     return HttpResponse(json.dumps(jsonMap), content_type="application/json")
 
+@login_required
 def event_signup(request):
     try:
         evtId = request.POST['id']
@@ -184,6 +188,7 @@ def event_signup(request):
     else:
         return HttpResponse(status=400)
 
+@permission_required("volunteer.admin")
 def volunteer_list(request):
 	if admin_is_logged_in():
 		volunteerList = Volunteer.objects.all()
@@ -194,7 +199,7 @@ def volunteer_list(request):
                       context_instance=RequestContext(request))
 	else:
 		return login_redirect(request)
-
+@login_required
 def volunteer_info(request, id):
 	if admin_is_logged_in():
 		volunteer =  get_object_or_404(Volunteer, id=id)
@@ -203,7 +208,7 @@ def volunteer_info(request, id):
     	'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience}
     	return render_to_response('volunteer/volInfo.html', values, 
     		context_instance=RequestContext(request))
-
+@permission_required("volunteer.admin")
 def add_event(request):
     def err_with_csrf(msg):
         val_dict = {'err_msg':msg}
@@ -252,10 +257,12 @@ def logout_page(request):
     logout(request)
     return HttpRedirectResponse('/')
 
+@login_required
 def program_list(request):
     jsonMapList = map(program_to_json, Program.objects.all())
     return HttpResponse(json.dumps(jsonMapList), content_type="application/json")
 
+@login_required
 def add_event_endpoint(request):
     try:
 	startHour = int(request.GET['startHour'])
