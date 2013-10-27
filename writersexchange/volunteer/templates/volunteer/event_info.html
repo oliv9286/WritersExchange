@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html>
+<head>
+	<title>{{ evt_name }}</title>
+</head>
+<body>
+  <div class="text-content">
+    <p> {{ message }} </p>
+  </div>
+  <br/>
+  <table class="text-content">
+  {% for v in volunteers %}
+    <tr>
+      <td><a href="/volunteers/{{ v.2 }}/" />{{ v.0 }} </a></td>
+      <td>{{ v.1 }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+</body>
+</html>
+
+{% endblock %}

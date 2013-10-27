@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+
+{% block content %}
+{% load url from future %}
+<html>
+<head>
+	<title>Volunteer Information</title>
+</head>
+
+<body>
+	<h2>{{name}}</h2>
+
+	<b>Contact Information</b><br>
+	Email: {{email}}<br>
+	Phone Number: {{phoneNum}}<br>
+	Home Address: {{address}}<br>
+
+	<br>
+
+
+	<b>Application Information</b><br>
+	Reference #1: {{refName1}}<br>
+	Phone Number: {{refPhone1}}<br>
+	<br>
+	Reference #2: {{refName2}}<br>
+	Phone Number: {{refPhone2}}<br>
+	<br>
+	Self Introduction: {{selfIntro}}
+
+	<br><br>
+	Return to <a href="/query/">Applications</a>
+
+	<br><br>
+
+	{% if adminView == True and isApproved == False %}
+	<form action={% url 'application-result' id %} method="post">
+		{% csrf_token %}
+		<input name="result" type="submit" value="Approve"/>
+		<input name="result" type="submit" value="Reject"/>
+	</form>
+
+	{% endif %}
+</body>
+</html>
+
+{% endblock %}

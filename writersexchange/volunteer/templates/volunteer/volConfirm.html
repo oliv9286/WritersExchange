@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Candidate Status Confirmation</title>
+</head>
+
+<body>
+	<br>
+	{% if result %}
+		<h2>Accepted!</h2>
+		{{name}} is added to the database.
+	{% else %}
+		<h2>Declined</h2>
+		{{name}} is declined.
+	{% endif %}
+
+	<br><br>
+	Return to <a href="/query/">Applications</a>
+</body>
+</html>

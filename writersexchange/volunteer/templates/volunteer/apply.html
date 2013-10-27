@@ -1,21 +1,131 @@
-<html>
+<!DOCTYPE html>
 <head>
-	<title>Application</title>
+	{% load staticfiles %}
+	<title>Writer's Exchange Application</title>
+	<link rel="stylesheet" href={% static "css/application.css" %} type="text/css">
+	<meta name="viewport" content="width=device-width; initial-scale=1.0">
 </head>
-
 <body>
-	<h1>Application Form</h1>
+<div id="application">
+	{% if message %}
+		{{message}}
+
+		<br/>
+		<a href="/"><button>Return to Home Page</button></a>
+	{% else %}
+
+	<form id="application-form" method="post">
+ {% csrf_token %}
 
 
-	<form method="post" action="/apply/">
-		{% csrf_token %}
-		<table>
-		{{ application_form.as_table }}
-		</table>
-
-		<input type="submit" value="Submit"/>
-
+		<span>* = Required</span>
+		<div>
+			<label for="phone-number" class="phone-number">Phone Number<span class="required">*</span></label>
+			<input type="text" name="phone-number">
+		</div>
+		<div>
+			<label for="street-address" class="street-address">Street Address<span class="required">*</span></label>
+			<input type="text" name="street-address">
+		</div>
+		<div>
+			<label for="city" class="city">City<span class="required">*</span></label>
+			<input type="text" name="city">
+		</div>
+		<div>
+			<label for="province" class="province">Province<span class="required">*</span></label>
+			<input type="text" name="province">
+		</div>
+		<div class="clearfix">
+		<div class="multi">
+			<label for="ref1name" class="ref1name">Reference 1: Name<span class="required">*</span></label>
+			<input type="text" name="ref1name">
+		</div>
+		<div class="multi">
+			<label for="ref1email" class="ref1email">Email<span class="required">*</span></label>
+			<input type="text" name="ref1email">
+		</div>
+		<div class="multi">
+			<label for="ref1phone" class="ref1phone">Phone<span class="required">*</span></label>
+			<input type="text" name="ref1phone">
+		</div>
+		<div class="clearfix">
+		<div class="multi">
+			<label for="ref2name" class="ref2name">Reference 2: Name<span class="required">*</span></label>
+			<input type="text" name="ref2name">
+		</div>
+		<div class="multi">
+			<label for="ref2email" class="ref2email">Email<span class="required">*</span></label>
+			<input type="text" name="ref2email">
+		</div>
+		<div class="multi">
+			<label for="ref2phone" class="ref2phone">Phone<span class="required">*</span></label>
+			<input type="text" name="ref2phone">
+		</div>
+		<div>
+			<label for="about" class="about">
+				<p>In one paragraph, please tell us a little about yourself: Who are you? Why would you like to volunteer with the Writers' Exchange?</p>
+ 				<p>What special skills would you like to share? Do you have any experience working with young learners?<span class="required">*</span></p>
+ 			</label>
+			<textarea name="id_experience"></textarea>
+		</div>
+		<div>
+			<label for="availability" class="availability">
+				<p>Availability: When would you like to volunteer? Please list specific dates and times.</p>
+				<p>For example, Monday mornings, Tuesdays during the after-school program, weekdays after 1 p.m.<span class="required">*</span></p></label>
+			<textarea name="id_availability"></textarea>
+		</div>
+		<div>
+			<input class="submit" type="submit" value="Submit Application">
+		</div>
 	</form>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src={% static "vendor/jquery.validate.js" %}></script>
+<script src={% static "vendor/additional-methods.js" %}></script>
+<script>
+$(document).ready(function () {
+    $('#application-form').validate({
+        rules: {
+            "phone-number": {
+            	required: true,
+            	phoneUS: true
+            },
+            "street-address": "required",
+            "city": "required",
+            "province": "required",
+            "ref1name": "required",
+            "ref1email": {
+            	required: true,
+            	email: true
+            },
+            "ref1phone": {
+            	required: true,
+            	phoneUS: true
+            },
+            "ref2name": "required",
+            "ref2email": {
+            	required: true,
+            	email: true
+            },
+            "ref2phone": {
+            	required: true,
+            	phoneUS: true
+            },
+            "id_experience": "required",
+            "id_availability": "required"
 
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+});
+</script>
+
+	{% endif %}
+<!--[if lt IE 9]>
+	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+<![endif]-->
 </body>
 </html>

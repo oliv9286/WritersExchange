@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html>
+<head></head>
+<body>
+<h2>Profile</h2>
+<!-- 
+{{profile.name}}
+{{profile.email}}
+ -->
+<p>Name: {{profile.name}} </p>
+
+<p>Email: {{profile.email}}</p>
+
+<p>Address: {{profile.address}}</p>
+
+<p>Phone: {{profile.phone}}</p>
+
+<p>City: {{profile.city}}</p>
+
+<p>Province: {{profile.province}}</p>
+
+{% if profile.isApproved == True%}
+	<p>Approval Status: Approved.</p>
+
+	<a href="events/"><button>Sign Up for Events</button></a>
+{% else %}
+	<p>Approval Status: Pending. </p>
+{% endif %}
+
+<a href="edit/"><button>Edit Profile</button></a>
+
+
+
+
+</body>
+</html>
+
+{% endblock %}
