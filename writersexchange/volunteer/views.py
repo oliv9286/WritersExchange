@@ -28,6 +28,11 @@ def apply(request):
     new_application.save()
     email = form.get('email')
 
+    domain = request.META['HTTP_POST']
+    link = domain + "/applications/" + str(volunteer.id) + "/"
+    message = "To view the application, go to: " + link
+    send_mail('Writer\'s Exchange Volunteer Application', message, 'from@example.com', [NOTIFICATION_EMAIL], fail_silently=False)
+
     return HttpResponse("Success!")
   else:
     return render_to_response('volunteer/apply.html',
@@ -117,8 +122,6 @@ def application_list(request):
 #                             context_instance=RequestContext(request))
 
 def signup(request):
-        if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse("index"))
         if request.method == 'POST':
             form = UserForm(request.POST)
             if form.is_valid():
