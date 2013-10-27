@@ -4,7 +4,7 @@ from django.http import Http404
 from django.template import RequestContext
 from django.shortcuts import redirect, render, get_object_or_404, render_to_response
 from django.core.urlresolvers import reverse
-from volunteer.models import Volunteer
+from volunteer.models import Volunteer, Event, Program
 from volunteer.forms import ApplicationForm, UserForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,8 @@ from django import forms
 from volunteer.management import *
 from django.core.mail import send_mail
 from volunteer.we_settings import NOTIFICATION_EMAIL
+from django.core.context_processors import csrf
+import datetime
 
 def index(request):
     return render_to_response('volunteer/index.html')
@@ -164,7 +166,52 @@ def volunteer_info(request, id):
     		context_instance=RequestContext(request))
 
 def add_event(request):
-    if admin_is_logged_in():
-        return render_to_response('volunteer/addEvents.html', context_instance=RequestContext(request))
+    def err_with_csrf(msg):
+        val_dict = {'err_msg':msg}
+        val_dict.update(csrf(request))
+        return val_dict
+
+    if request.method != "POST":
+        #Send client to event creation page
+        if admin_is_logged_in():
+            tup = {}
+            tup.update(csrf(request))
+            return render_to_response('volunteer/addEvents.html', tup, context_instance=RequestContext(request))
+        else:
+            return login_redirect(request)
     else:
-        return login_redirect(request)
+        try:
+            print request.POST
+            print request.POST['month'][0]
+            name = request.POST['name']
+            month = int(request.POST['month'][0])
+            day = int(request.POST['day'][0])
+            year = int(request.POST['year'][0])
+            startHour = int(request.POST['sHour'][0])
+            startMinute = int(request.POST['sMinute'][0])
+            endHour = int(request.POST['fHour'][0])
+            endMinute = int(request.POST['fMinute'][0])
+            day = datetime.date(year, month, day)
+            startDay = datetime.time(startHour, startMinute)
+            endDay = datetime.time(endHour, endMinute)
+        except KeyError:
+            return render_to_response('volunteer/addEvents.html', err_with_csrf('This error should not have happened: did you change addEvents.html or views.py?'), context_instance=RequestContext(request))
+        except ValueError as ve:
+            print ve
+            return render_to_response('volunteer/addEvents.html', err_with_csrf('Something is formatted wrong: could not parse text fields.'), context_instance=RequestContext(request))
+        evt = Event()
+        evt.startTime = startDay
+        evt.endTime = endDay
+        evt.date = day
+        programs = Program.objects.filter(name__exact=name)
+        if len(programs) == 0:
+            prog = Program()
+            prog.name = name
+            prog.save()
+        else:
+            prog = programs[0]
+        evt.name = prog
+        evt.save()
+        success_info = {'success_msg':'Event created.'} 
+        success_info.update(csrf(request))
+        return render_to_response('volunteer/addEvents.html', success_info, context_instance=RequestContext(request))
