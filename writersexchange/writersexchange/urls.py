@@ -25,6 +25,9 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^applications/(\w+)/', views.application_review, name="applications"),
     url(r'^application_result/(\w+)/', views.application_result),
-    url(r'^applications/', views.application_list)
+    url(r'^applications/', views.application_list),
+    url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events),
+    url(r'^events/(\d{4})/(\d+)/', views.month_events),
+    url(r'^events/signup/', views.event_signup)
 )
 
