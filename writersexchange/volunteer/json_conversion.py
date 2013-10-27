@@ -11,7 +11,8 @@ def events_to_month_info(eventList):
 def event_to_json(evt):
     return {'startTime':date_to_minute_hour(evt.startTime),
             'endTime':date_to_minute_hour(evt.endTime),
-            'name':evt.name,
+            'name':evt.name.name,
+            'id':evt.id,
             'description':''}
 
 def date_to_minute_hour(date):
