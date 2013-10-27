@@ -4,10 +4,10 @@ class Program(models.Model):
 	name = models.CharField(max_length=200, null=False)
 
 class Event(models.Model):
-	date = models.DateField(auto_now=False, auto_now_add=False null=False)
+	date = models.DateField(auto_now=False, auto_now_add=False, null=False)
 	startTime = models.TimeField(auto_now=False, auto_now_add=False, null=False)
 	endTime = models.TimeField(auto_now=False, auto_now_add=False, null=False)
-	name = models.ForeignKey(name.Program)
+	name = models.ForeignKey(Program)
 
 # Create your models here.
 class Volunteer(models.Model):
