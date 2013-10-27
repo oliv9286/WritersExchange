@@ -207,7 +207,12 @@ $(function () {
             function dispatchEvent(eventSingle0, event){        
                 var e0 = JSON.parse(JSON.stringify(event));
                 var e0start = JSON.parse(JSON.stringify(e0.startTime));
-                var e0startOut = e0start.hour.toString().concat(':').concat(e0start.minute.toString());
+				var hour = e0start.hour.toString();
+				var minute = e0start.minute.toString();
+				if(minute.length == 1) {
+					minute += "0";
+				}
+                var e0startOut = hour.concat(':').concat(minute);
                 //var e0end = JSON.parse(JSON.stringify(e0.endTime));
                 //e0endOut = e0end.hour.toString().concat(':').concat(e0end.minute.toString());
                 eventSingle0.find('p').text(e0.name) ;
@@ -218,7 +223,7 @@ $(function () {
 
             function createEventHTML(title, time, eventId){
                 var dataId = parseInt($this.find('.total-bar b').text());
-                
+
                 eventHTML = (
                     div('div','event-single').attr('data-id', dataId).attr('data-eventid', eventId).append(
                         div('p','').text(title),
@@ -299,7 +304,7 @@ $(function () {
                 console.log(self.find('.volunteerText').text());
 				console.log(self.parent().attr('data-eventid'));
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     data: self.parent().attr('data-eventid'),
                     url: "/events/signup/",
                     success: function(data){
