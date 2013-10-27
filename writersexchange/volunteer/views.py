@@ -23,9 +23,11 @@ import datetime
 def index(request):
     return render_to_response('volunteer/index.html')
 
+@login_required
 def apply(request):
   form = request.POST
-  new_application = Volunteer(name=form.get('name'), email=form.get('email-address'), phone=form.get('phone-number'), address=form.get('street-address'), city=form.get('city'), province=form.get('province'), isApproved=False, \
+  user = request.user
+  new_application = Volunteer(name=user.first_name + " "+user.last_name, email=user.email, phone=form.get('phone-number'), address=form.get('street-address'), city=form.get('city'), province=form.get('province'), isApproved=False, \
     reference1name=form.get('ref1name'), reference1email=form.get('ref1email'), reference1phone=form.get('ref1phone'), \
     reference2name=form.get('ref2name'), reference2email=form.get('ref2email'), reference2phone=form.get('ref2phone'), \
     experience=form.get('id_experience'), availability=form.get('id_availability'))
@@ -52,7 +54,7 @@ def apply(request):
                     context_instance=RequestContext(request))
 
 # generates a list of data
-
+@login_required
 def query(request):
 
 	volunteer = Volunteer.objects.all()
@@ -84,19 +86,8 @@ def signin(request):
 	        return HttpResponse('invalid login')
 
 
-# def application_review(request,uid):
-#     if admin_is_logged_in():
-#         volunteer = get_object_or_404(Volunteer, id=uid)
-#         fieldList = generate_field_list(volunteer)
-#         return render_to_response(
-#                          'volunteer/apply_review.html',
-#                          {'display_fields':fieldList,
-#                           'forward_url':
-#                           '/application_result/' + str(uid)},
-#                          context_instance=RequestContext(request))
-#     else:
-#         return login_redirect(request)
 
+@login_required
 def application_result(request, uid):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, id=uid)
@@ -117,6 +108,19 @@ def application_result(request, uid):
     else:
         return login_redirect(request)
 
+@login_required
+def profile(request):
+  user = request.user
+  volunteer_profile = get_object_or_404(Volunteer, email=user.email)
+  #if user's profile does not yet exist we should force them to direct to the application page
+
+  if (not volunteer_profile):
+    return redirect('apply')
+
+  return render_to_response("volunteer/profile.html", {"profile":volunteer_profile},
+                            context_instance=RequestContext(request))
+
+@login_required
 def application_list(request):
     if admin_is_logged_in():
        needingReview = Volunteer.objects.filter(isApproved__exact=False)
@@ -143,7 +147,7 @@ def signup(request):
             new_user = authenticate(username=request.POST['username'],
                                 password=request.POST['password'], email=request.POST['email'])
             login(request, new_user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("apply"))
         else:
             return render_to_response('volunteer/register.html', {'form': form}, context_instance=RequestContext(request))
       except IntegrityError, e:
@@ -155,7 +159,7 @@ def signup(request):
             context = {'form': form}
             return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
 
-
+@login_required
 def month_events(request, year, month):
     year = int(year)
     month = int(month)
@@ -166,12 +170,14 @@ def month_events(request, year, month):
     jsonMap = events_to_month_info(events)
     return HttpResponse(json.dumps(jsonMap), content_type="application/json")
 
+@login_required
 def day_events(request, year, month, day):
     events = Event.objects.filter(date__year=year, date__month=month,
                                    date__day=day)
     jsonMap = events_to_day_info(events)
     return HttpResponse(json.dumps(jsonMap), content_type="application/json")
 
+@login_required
 def event_signup(request):
     try:
         evtId = request.POST['id']
@@ -189,6 +195,7 @@ def event_signup(request):
     else:
         return HttpResponse(status=400)
 
+@login_required
 def volunteer_list(request):
 	if admin_is_logged_in():
 		volunteerList = Volunteer.objects.all()
@@ -206,7 +213,7 @@ def volunteer_info(request, id):
     volunteer =  get_object_or_404(Volunteer, id=id)
     values = {'id':volunteer.id,'name': volunteer.name, 'email': volunteer.email, 'phoneNum': volunteer.phone, 'address': volunteer.address, 
     'refName1': volunteer.reference1name, 'refPhone1': volunteer.reference1phone, 'refName2': volunteer.reference2name, 
-    'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience, "adminView":True}
+    'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience, "adminView":True, "isApproved":volunteer.isApproved}
     return render_to_response('volunteer/volInfo.html', values, 
     	context_instance=RequestContext(request))
   else:
@@ -215,7 +222,7 @@ def volunteer_info(request, id):
     return render_to_response('volunteer/volInfo.html', values, 
       context_instance=RequestContext(request))
 
-
+@login_required
 def add_event(request):
     def err_with_csrf(msg):
         val_dict = {'err_msg':msg}
@@ -266,6 +273,8 @@ def add_event(request):
         success_info = {'success_msg':'Event created.'} 
         success_info.update(csrf(request))
         return render_to_response('volunteer/addEvents.html', success_info, context_instance=RequestContext(request))
+
+
 def logout_page(request):
     logout(request)
-    return HttpRedirectResponse('/')
+    return redirect('index')

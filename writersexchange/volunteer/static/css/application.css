@@ -58,7 +58,7 @@ body, input, textarea {
 	height: 100px;
 }
 
-#application-form input[type="submit"] {
+#application-form input[type="submit"], button {
 	font-size: 14px;
 }
 
@@ -80,7 +80,7 @@ input, textarea {
 	display: inline-block;
 }
 
-input[type=submit] {
+input[type=submit], button {
 	color: #444;
 	padding: 5px 15px;
 	margin: 10px 0 0 2px;
@@ -88,6 +88,13 @@ input[type=submit] {
 	border: 0 none;
 	cursor: pointer;
 	-webkit-appearance: none;
+}
+
+.text-content{
+	margin-left:auto;
+	margin-right:auto;
+	width:70%;
+	text-align: center;
 }
 
 @media only screen and (max-width: 640px) {
@@ -112,7 +119,7 @@ input[type=submit] {
 		width: 100%;
 	}
 
-	#application-form input[type="submit"] {
+	#application-form input[type="submit"], button {
 		background-color: #99CCFF;
 		height: 50px;
 	}

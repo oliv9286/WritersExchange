@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+
+{% extends "base.html" %}
+
+{% block content %}
 {% load url from future %}
 <html>
 <head>
@@ -26,11 +30,11 @@
 	Self Introduction: {{selfIntro}}
 
 	<br><br>
-	Return to <a href="../applications/">Applications</a>
+	Return to <a href="/query/">Applications</a>
 
 	<br><br>
 
-	{% if adminView == True %}
+	{% if adminView == True and isApproved == False %}
 	<form action={% url 'application-result' id %} method="post">
 		{% csrf_token %}
 		<input name="result" type="submit" value="Approve"/>
@@ -40,3 +44,5 @@
 	{% endif %}
 </body>
 </html>
+
+{% endblock %}

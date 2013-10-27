@@ -1,9 +1,14 @@
-{% extends "base.html" %}
 
-{% block content %}
+{% load staticfiles %}
 
+<html>
+<head>
+	<link rel="stylesheet" href={% static "css/application.css" %} type="text/css">
+</head>
+
+<body>
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p class="error">Your username and password didn't match. Please try again.</p>
 {% endif %}
 
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
@@ -22,5 +27,5 @@
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
-{% endblock %}
+</body>
+</html>
