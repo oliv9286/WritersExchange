@@ -33,8 +33,10 @@ urlpatterns = patterns('',
     url(r'^volunteers/(\d+)/', views.volunteer_info),
     url(r'^events/create/', views.add_event),
     url(r'^events/new/', views.add_event_endpoint), #json
+    url(r'^events/info/(\d+)/', views.event_info),
     url(r'^applications/', views.volunteer_list),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login'}),
-    url(r'^programs/', views.program_list) #json
+    url(r'^programs/(\d+)/', views.program_events),
+    url(r'^programs/json/', views.program_list) #json
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

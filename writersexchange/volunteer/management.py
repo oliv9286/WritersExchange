@@ -39,3 +39,11 @@ def program_for_name(name):
       pForName = programs[0]
   return pForName
 
+def event_listitem_tuple(evt):
+  return (evt.id, 
+   evt.date.strftime("%a, %b %d %Y"), 
+   event_start_end_format(evt.startTime),
+   event_start_end_format(evt.endTime))
+
+def event_start_end_format(time):
+    return time.strftime("%H:%M")

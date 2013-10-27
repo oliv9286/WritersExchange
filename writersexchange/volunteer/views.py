@@ -180,8 +180,7 @@ def event_signup(request):
         return HttpResponse(status=400)
     evt = Event.objects.filter(id__exact=evtId)
     if request.user.is_authenticated():
-        uid = request.session['user_id']
-        volunteer = Volunteer.objects.filter(id__exact=uid)
+        volunteer = Volunteer.objects.filter(email__exact=request.user.email)
         volunteer.events.add(evt)
         volunteer.save()
         return HttpResponse(status=200)
@@ -296,3 +295,31 @@ def add_event_endpoint(request):
     evt.save()
     return HttpResponse(status=200)
 
+@login_required
+def program_events(request, programId):
+    if request.method != "POST":
+        program = get_object_or_404(Program, id=programId)
+        evts = Event.objects.filter(name__exact=program)
+        eventTuples = map(event_listitem_tuple, evts)
+        return render_to_response("volunteer/program_event_list.html",
+                       {'program_name':program.name, 'events':eventTuples},
+                       context_instance=RequestContext(request))
+    else:
+        try:
+            keys = request.POST.getlist('evt_id')
+        except KeyError:
+            return HttpResponse(status=400)
+        volunteer = Volunteer.objects.get(email__exact=request.user.email)
+        for k in keys:
+            volunteer.events.add(Event.objects.get(id=k))
+        return HttpResponse("Signed up for " + str(len(keys)) + " events")
+
+@login_required
+def event_info(request, evtId):
+    event = get_object_or_404(Event, id=evtId)
+    program = event.name
+    volunteerCount = Volunteer.objects.filter(events__id__exact=evtId).count()
+    evtTuple = event_listitem_tuple(event)
+    return HttpResponse(program.name + " runs on " + evtTuple[1] + 
+                        " from " + evtTuple[2] + " until " + evtTuple[3] +
+                        " and has " + str(volunteerCount) + " volunteers.")

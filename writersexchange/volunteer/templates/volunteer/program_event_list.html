@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>{{program_name}}</title>
+</head>
+<body>
+<h1>Events for {{program_name}}</h1>
+<form method="post">
+{% csrf_token %}
+{% for evt in events %}
+  <br/>
+  <input type="checkbox" name="evt_id" value="{{evt.0}}">
+     {{evt.1}} from {{evt.2}} until {{evt.3}}
+  </input>
+{% endfor %}
+  <br/>
+  <input type="submit" value="Sign Up"/>
+</form>
+</body>
+</html>
