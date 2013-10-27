@@ -296,10 +296,9 @@ $(function () {
             
             $this.on('click', '.volunteer', function(){
                 var self = $(this);
-                console.log($(this).find('.volunteerText').text());
                 $.ajax({
-                    type: 'POST',
-                    // data: eventId,//ID OF EVENT, NEEDS TO BE PROVIDED
+                    type: 'GET',
+                    data: self.parent().attr("data-eventid"),
                     url: "/events/signup/",
                     success: function(){
                         self.find('.volunteerText').text('Volunteering!');
