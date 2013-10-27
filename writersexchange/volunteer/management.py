@@ -1,4 +1,6 @@
 
+from volunteer.models import Program
+
 def generate_field_list(volunteer):
     return [("Name", volunteer.name), ("Email", volunteer.email), 
             ("Phone #", volunteer.phone), ("Address", volunteer.address), 
@@ -24,3 +26,16 @@ def reject_application(volunteer):
 
 def name_email_tuple(volunteer):
   return (volunteer.name, volunteer.email)
+
+def program_for_name(name):
+  programs = Program.objects.filter(name__exact=name)
+  if len(programs) == 0:
+      #no program with the given name exists, create it
+      pForName = Program()
+      pForName.name = name
+      pForName.save()
+  else:
+      #use existing program
+      pForName = programs[0]
+  return pForName
+

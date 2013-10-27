@@ -242,18 +242,50 @@ def add_event(request):
         evt.startTime = startDay
         evt.endTime = endDay
         evt.date = day
-        programs = Program.objects.filter(name__exact=name)
-        if len(programs) == 0:
-            prog = Program()
-            prog.name = name
-            prog.save()
-        else:
-            prog = programs[0]
-        evt.name = prog
+        evt.name = program_for_name(prog)
         evt.save()
         success_info = {'success_msg':'Event created.'} 
         success_info.update(csrf(request))
         return render_to_response('volunteer/addEvents.html', success_info, context_instance=RequestContext(request))
+
 def logout_page(request):
     logout(request)
     return HttpRedirectResponse('/')
+
+def program_list(request):
+    jsonMapList = map(program_to_json, Program.objects.all())
+    return HttpResponse(json.dumps(jsonMapList), content_type="application/json")
+
+def add_event_endpoint(request):
+    try:
+	startHour = int(request.GET['startHour'])
+	startMinute = int(request.GET['startMinute'])
+	endHour = int(request.GET['endHour'])
+	endMinute = int(request.GET['endMinute'])
+        day = int(request.GET['day'])
+        month = int(request.GET['month'])
+        year = int(request.GET['year'])
+        startTime = datetime.time(startHour, startMinute)
+        endTime = datetime.time(endHour, endMinute)
+        day = datetime.date(year, month, day)
+    except ValueError:
+	return HttpResponse("Value error: bad field value given", status=400)
+    except KeyError:
+	return HttpResponse("Key error: key not matched", status=400)
+    if request.GET.get('programId') is None and request.GET.get('name') is None:
+	return HttpResponse("No program given", status=400)
+    elif request.GET.get('programId') is None:
+        program = program_for_name(request.GET['name'])
+    else:
+	try:
+	   program = Program.objects.get(id = id)
+        except Program.DoesNotExist:
+           return HttpResponse("Bad program id", status=400)
+    evt = Event()
+    evt.name = program
+    evt.startTime = startTime
+    evt.endTime = endTime
+    evt.date = day
+    evt.save()
+    return HttpResponse(status=200)
+

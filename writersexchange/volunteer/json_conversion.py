@@ -21,3 +21,5 @@ def date_to_minute_hour(date):
 def events_to_day_info(eventList):
     return map(event_to_json, eventList)
 
+def program_to_json(program):
+    return {'name':program.name, 'id':program.id}
