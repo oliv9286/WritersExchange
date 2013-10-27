@@ -12,6 +12,11 @@ body, input, textarea {
 	line-height: 1.625;
 }
 
+table.applicants .row,
+table.applicants .tableHeader {
+	padding: 0 10px 0 0;
+	text-align: center;
+}
 
 
 .clearfix {

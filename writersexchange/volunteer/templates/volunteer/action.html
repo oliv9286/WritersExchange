@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html>
+<head>
+</head>
+
+<body>
+{% if volunteer.isApproved == False %}
+	<p>Sorry, your application status is still pending and cannot sign up for events yet, you will be notified once your application has been processed. </p>
+{% else %}
+	<a href=""><button>Sign Up for Volunteering Events</button></a>
+{% endif %}
+
+</body>
+
+</html>
+
+{% endblock %}

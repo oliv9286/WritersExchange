@@ -26,8 +26,7 @@ urlpatterns = patterns('',
     url(r'^signup/', views.signup, name="signup"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^applications/(\d+)/', views.application_review, name="applications"),
-    url(r'^application_result/(\d+)/', views.application_result, 
-        name='application-result'),
+    url(r'^application_result/(\d+)/', views.application_result, name="application-result"),
     url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events), #json
     url(r'^events/(\d{4})/(\d+)/', views.month_events), #json
     url(r'^events/signup/', views.event_signup), #json
@@ -40,6 +39,8 @@ urlpatterns = patterns('',
     url(r'^programs/(\d+)/', views.program_events),
     url(r'^programs/json/', views.program_list), #json
     url(r'^accounts/profile/', views.profile, name="accountprofile"),
-    url(r'^calendar/', views.calendar)
+    url(r'^action/', views.action, name="action"),
+    url(r'^calendar/', views.calendar, name="calendar")
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

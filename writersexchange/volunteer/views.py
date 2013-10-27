@@ -56,7 +56,7 @@ def apply(request):
                     context_instance=RequestContext(request))
 
 # generates a list of data
-@login_required
+@permission_required("volunteer.admin")
 def query(request):
 
 	volunteer = Volunteer.objects.all()
@@ -87,7 +87,7 @@ def signin(request):
 	        # Return an 'invalid login' error message.
 	        return HttpResponse('invalid login')
 
-@permission_required("volunteer.admin")
+# @permission_required("volunteer.admin")
 def application_review(request,uid):
     if admin_is_logged_in():
         volunteer = get_object_or_404(Volunteer, id=uid)
@@ -101,7 +101,7 @@ def application_review(request,uid):
     else:
         return login_redirect(request)
 
-@permission_required("volunteer.admin")
+# @permission_required("volunteer.admin")
 def application_result(request, uid):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, id=uid)
@@ -125,16 +125,27 @@ def application_result(request, uid):
 @login_required
 def profile(request):
   user = request.user
-  volunteer_profile = Volunteer.objects.get(email=user.email)
-  fields = [x[0] for x in generate_field_list(volunteer_profile)]
-  values = [x[1] for x in generate_field_list(volunteer_profile)]
-  #if user's profile does not yet exist we should force them to direct to the application page
+  if (user.has_perm("volunteer.admin")):
+    return redirect('query')
 
-  if (not volunteer_profile):
+  return redirect('action')
+
+@login_required
+def action(request):
+  user = request.user
+  try:
+    volunteer = Volunteer.objects.get(email = user.email)
+  except Volunteer.DoesNotExist:
+    volunteer = None
+  
+  if (not volunteer):
     return redirect('apply')
+  else:
+    # this should redirect to sign up event
+    return render_to_response("volunteer/action.html", {"volunteer":volunteer})
+  
 
-  return render_to_response("volunteer/profile.html", {"profile":volunteer_profile, "fields":fields, "values":values},
-                            context_instance=RequestContext(request))
+
 
 @permission_required("volunteer.admin")
 def application_list(request):
