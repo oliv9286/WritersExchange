@@ -179,3 +179,7 @@ def event_signup(request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=400)
+
+def logout_page(request):
+    logout(request)
+    return HttpRedirectResponse('/')
