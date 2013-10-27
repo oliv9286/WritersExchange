@@ -299,7 +299,7 @@ $(function () {
                 console.log(self.find('.volunteerText').text());
 				console.log(self.parent().attr('data-eventid'));
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     data: self.parent().attr('data-eventid'),
                     url: "/events/signup/",
                     success: function(data){

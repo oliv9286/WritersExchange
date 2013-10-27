@@ -199,19 +199,16 @@ def day_events(request, year, month, day):
 @login_required
 def event_signup(request):
     try:
-        evtId = request.POST['id']
+        evtId = int(request.GET.keys()[0])
     except KeyError:
-        return HttpResponse(status=400)
+        return HttpResponse("Key does not exist", status=400)
     except ValueError:
-        return HttpResponse(status=400)
-    evt = Event.objects.filter(id__exact=evtId)
-    if request.user.is_authenticated():
-        volunteer = Volunteer.objects.filter(email__exact=request.user.email)
-        volunteer.events.add(evt)
-        volunteer.save()
-        return HttpResponse(status=200)
-    else:
-        return HttpResponse(status=400)
+        return HttpResponse("Value error",status=400)
+    evt = Event.objects.get(id=evtId)
+    volunteer = Volunteer.objects.get(email=request.user.email)
+    volunteer.events.add(evt)
+    volunteer.save()
+    return HttpResponse(status=200)
 
 @permission_required("volunteer.admin")
 def volunteer_list(request):
