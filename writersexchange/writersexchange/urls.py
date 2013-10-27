@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from volunteer import views
-from writersexchange import settings
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -26,5 +27,5 @@ urlpatterns = patterns('',
     url(r'^applications/(\w+)/', views.application_review, name="applications"),
     url(r'^application_result/(\w+)/', views.application_result),
     url(r'^applications/', views.application_list)
-)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

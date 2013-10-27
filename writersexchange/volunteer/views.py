@@ -17,27 +17,22 @@ def index(request):
     return render_to_response('volunteer/index.html')
 
 def apply(request):
-	form = ApplicationForm(request.POST)
-	if form.is_valid():
-		new_application = form.save()
-		new_application.save()
-		email = form.cleaned_data['email']
-		volunteer = get_object_or_404(Volunteer, email=email)
-                # Send email about new applicant to NOTIFICATION_EMAIL
-                # Get link to application for body of email
-                # TODO: Change request.META['HTTP_HOST'] to a constant?
-                domain = request.META['HTTP_HOST']
-                link = domain + "/applications/" + str(volunteer.id) + "/"
-                # Create message body with link to application
-                message = "To view the application, go to: " + link
-                # TODO: set EMAIL_BACKEND in settings file to the actual email backend
-                # TODO: change 'from@example.com' to actual address to send from
-                send_mail('Writer\'s Exchange Volunteer Application', message, 'from@example.com', [NOTIFICATION_EMAIL], fail_silently=False)
-		return HttpResponse("Thank you for applying, we will notify you through email when your application has been reviewed.")
-	else: 
-	    return render_to_response('volunteer/apply.html',
-                          {'application_form': form},
-                          context_instance=RequestContext(request))
+  form = request.POST
+  new_application = Volunteer(name=form.get('name'), email=form.get('email-address'), phone=form.get('phone-number'), address=form.get('street-address'), city=form.get('city'), province=form.get('province'), isApproved=False, \
+    reference1name=form.get('ref1name'), reference1email=form.get('ref1email'), reference1phone=form.get('ref1phone'), \
+    reference2name=form.get('ref2name'), reference2email=form.get('ref2email'), reference2phone=form.get('ref2phone'), \
+    experience=form.get('id_experience'), availability=form.get('id_availability'))
+
+  if (form.get('email') != None):
+    new_application.save()
+    email = form.get('email')
+
+    return HttpResponse("Success!")
+  else:
+    return render_to_response('volunteer/apply.html',
+                    {'application_form': form},
+                    context_instance=RequestContext(request))
+
 # generates a list of data
 
 def query(request):
