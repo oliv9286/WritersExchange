@@ -25,14 +25,15 @@
 			<th>Approval Status</th>
 		</tr>
 	</table>
+
 	<div class="live_search">
 		{% if dataset %}
 			{% for v in dataset %}
 
 				{% if v.isApproved == True %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   {{v.email}}   {{v.phone}}   <td>No</td></a>
+					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>Yes</td></a>
 				{% else %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   {{v.email}}   {{v.phone}}   <td>Yes</td></a>
+					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>No</td></a>
 				{% endif %}
 
 			<br/>
@@ -42,14 +43,23 @@
 	
 
 	</div>
+
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="vendor/jquery-1.9.1.min.js"><\/script>')</script>
 <!-- <script src="jquery.searchContent.js" type="text/javascript"></script> -->
 
 <script src={% static "jquery.searchContent.js" %}></script>
 
+
+
 <script>
 	$('.live_search').searchContent();
 </script>
+
+<script type="text/javascript">
+	var n = $("br").filter(function() { return $(this).css("display") == "none" })
+</script>
+
 </body>
 </html>

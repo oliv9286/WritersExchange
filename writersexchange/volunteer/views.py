@@ -31,8 +31,12 @@ def apply(request):
     experience=form.get('id_experience'), availability=form.get('id_availability'))
 
   if (form):
-    
-    new_application.save()
+    try:
+      new_application.save()
+    except IntegrityError, e:
+      fail_msg = "Sorry, record shows that your previous application has not been proccessed, please be patient (:"
+      return render_to_response('volunteer/apply.html', {'message': fail_msg})
+
     email = form.get('email')
 
     domain = request.META['HTTP_HOST']
@@ -80,24 +84,24 @@ def signin(request):
 	        return HttpResponse('invalid login')
 
 
-def application_review(request,uid):
-    if admin_is_logged_in():
-        volunteer = get_object_or_404(Volunteer, id=uid)
-        fieldList = generate_field_list(volunteer)
-        return render_to_response(
-                         'volunteer/apply_review.html',
-                         {'display_fields':fieldList,
-                          'forward_url':
-                          '/application_result/' + str(uid)},
-                         context_instance=RequestContext(request))
-    else:
-        return login_redirect(request)
+# def application_review(request,uid):
+#     if admin_is_logged_in():
+#         volunteer = get_object_or_404(Volunteer, id=uid)
+#         fieldList = generate_field_list(volunteer)
+#         return render_to_response(
+#                          'volunteer/apply_review.html',
+#                          {'display_fields':fieldList,
+#                           'forward_url':
+#                           '/application_result/' + str(uid)},
+#                          context_instance=RequestContext(request))
+#     else:
+#         return login_redirect(request)
 
 def application_result(request, uid):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, id=uid)
        try:
-	 result = request.GET['result']
+	 result = request.POST['result']
        except KeyError:
          raise Http404    #TODO display a failure page
        if result == 'Approve':
@@ -196,14 +200,21 @@ def volunteer_list(request):
 	else:
 		return login_redirect(request)
 
+@login_required
 def volunteer_info(request, id):
-	if admin_is_logged_in():
-		volunteer =  get_object_or_404(Volunteer, id=id)
-    	values = {'name': volunteer.name, 'email': volunteer.email, 'phoneNum': volunteer.phone, 'address': volunteer.address, 
-    	'refName1': volunteer.reference1name, 'refPhone1': volunteer.reference1phone, 'refName2': volunteer.reference2name, 
-    	'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience}
-    	return render_to_response('volunteer/volInfo.html', values, 
-    		context_instance=RequestContext(request))
+  if admin_is_logged_in():
+    volunteer =  get_object_or_404(Volunteer, id=id)
+    values = {'id':volunteer.id,'name': volunteer.name, 'email': volunteer.email, 'phoneNum': volunteer.phone, 'address': volunteer.address, 
+    'refName1': volunteer.reference1name, 'refPhone1': volunteer.reference1phone, 'refName2': volunteer.reference2name, 
+    'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience, "adminView":True}
+    return render_to_response('volunteer/volInfo.html', values, 
+    	context_instance=RequestContext(request))
+  else:
+    volunteer = get_object_or_404(Volunteer, id=id)
+    values["adminView":False]
+    return render_to_response('volunteer/volInfo.html', values, 
+      context_instance=RequestContext(request))
+
 
 def add_event(request):
     def err_with_csrf(msg):
