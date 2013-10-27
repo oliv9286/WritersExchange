@@ -27,10 +27,10 @@
 		<tbody class="live_search">
 		{% for v in dataset %}
 			<tr>
-				<td class="row">{{v.name}}</td>
-				<td class="row">{{v.email}}</td>
-				<td class="row">{{v.phone}}</td>
-				<td class="row">{{v.isApproved}}</td>
+				<td class="row"><a href={% url 'profile' v.id %}>{{v.name}}</a></td>
+				<td class="row"><a href={% url 'profile' v.id %}>{{v.email}}</a></td>
+				<td class="row"><a href={% url 'profile' v.id %}>{{v.phone}}</a></td>
+				<td class="row"><a href={% url 'profile' v.id %}>{{v.isApproved}}</a></td>
 			</tr>	
 		{% endfor %}
 		</tbody>
