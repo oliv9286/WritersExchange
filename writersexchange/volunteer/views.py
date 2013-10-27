@@ -143,4 +143,12 @@ def signup(request):
                 return render_to_response('volunteer/register.html', context, context_instance=RequestContext(request))
 
 
-
+def volunteer_list(request):
+	if admin_is_logged_in():
+		volunteerList = Volunteer.objects.all()
+		return volunteerList
+		render_to_response('volunteer/volunteerList.html',
+                      {'volunteerTuples': volunteerList},
+                      context_instance=RequestContext(request))
+	else:
+		return login_redirect(request)
