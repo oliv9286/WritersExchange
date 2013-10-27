@@ -34,7 +34,7 @@
 
 	<br><br>
 
-	{% if adminView == True and isApproved == False %}
+	{% if adminView == True and isApproved == False  %}
 	<form action={% url 'application-result' id %} method="post">
 		{% csrf_token %}
 		<input name="result" type="submit" value="Approve"/>

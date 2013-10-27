@@ -17,32 +17,38 @@
 		<input type="submit" value="Email All">
 	</form>
 
-	<table>
+	<table class="applicants">
 		<tr>
-			<th>Name</th>
-			<th>Email</th>
-			<th>Phone</th>
-			<th>Approval Status</th>
+			<th class="tableHeader">Name</th>
+			<th class="tableHeader">Email</th>
+			<th class="tableHeader">Phone</th>
+			<th class="tableHeader">Approval Status</th>
 		</tr>
-	</table>
+		<tbody class="live_search">
+		{% for v in dataset %}
+			<tr>
+				<td class="row">{{v.name}}</td>
+				<td class="row">{{v.email}}</td>
+				<td class="row">{{v.phone}}</td>
+				<td class="row">{{v.isApproved}}</td>
+			</tr>	
+		{% endfor %}
+		</tbody>
 
-	<div class="live_search">
+	</table>
+<!-- 
 		{% if dataset %}
 			{% for v in dataset %}
 
-				{% if v.isApproved == True %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>Yes</td></a>
-				{% else %}
-					<a href={% url 'profile' v.id %}>{{v.name}}   <span class="selected-email">{{v.email}}</span>   {{v.phone}}   <td>No</td></a>
-				{% endif %}
+					<a href={% url 'profile' v.id %} class="applicant">{{v.name}}  {{v.email}}  {{v.phone}}   {{v.isApproved}}</a>
 
-			<br/>
+
 			{% endfor %}
 		{% endif %}
 
 	
 
-	</div>
+	</div> -->
 
 <a href="/"><button>Home</button></a>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
