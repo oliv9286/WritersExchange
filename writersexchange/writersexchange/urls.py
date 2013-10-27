@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login'}),
     url(r'^programs/(\d+)/', views.program_events),
     url(r'^programs/json/', views.program_list), #json
-    url(r'^accounts/profile/', views.profile, name="accountprofile")
+    url(r'^accounts/profile/', views.profile, name="accountprofile"),
+    url(r'^calendar/', views.calendar)
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -22,7 +22,9 @@ import datetime
 
 def index(request):
     return render_to_response('volunteer/index.html')
-
+@login_required
+def calendar(request):
+    return render_to_response('volunteer/prettyCalendar.htm')
 @login_required
 def apply(request):
   form = request.POST
