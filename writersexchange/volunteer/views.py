@@ -23,16 +23,22 @@ import datetime
 def index(request):
     return render_to_response('volunteer/index.html')
 
+@login_required
 def apply(request):
   form = request.POST
-  new_application = Volunteer(name=form.get('name'), email=form.get('email-address'), phone=form.get('phone-number'), address=form.get('street-address'), city=form.get('city'), province=form.get('province'), isApproved=False, \
+  user = request.user
+  new_application = Volunteer(name=user.first_name + " "+user.last_name, email=user.email, phone=form.get('phone-number'), address=form.get('street-address'), city=form.get('city'), province=form.get('province'), isApproved=False, \
     reference1name=form.get('ref1name'), reference1email=form.get('ref1email'), reference1phone=form.get('ref1phone'), \
     reference2name=form.get('ref2name'), reference2email=form.get('ref2email'), reference2phone=form.get('ref2phone'), \
     experience=form.get('id_experience'), availability=form.get('id_availability'))
 
   if (form):
-    
-    new_application.save()
+    try:
+      new_application.save()
+    except IntegrityError, e:
+      fail_msg = "Sorry, record shows that your previous application has not been proccessed, please be patient (:"
+      return render_to_response('volunteer/apply.html', {'message': fail_msg})
+
     email = form.get('email')
 
     domain = request.META['HTTP_HOST']
@@ -40,14 +46,15 @@ def apply(request):
     message = "To view the application, go to: " + link
     send_mail('Writer\'s Exchange Volunteer Application', message, 'from@example.com', [NOTIFICATION_EMAIL], fail_silently=False)
 
-    return HttpResponse("Success!")
+    success_msg = "Thank you for your application! We will notify you about your application status soon."
+    return render_to_response('volunteer/apply.html', {'message': success_msg})
   else:
     return render_to_response('volunteer/apply.html',
                     {'application_form': form},
                     context_instance=RequestContext(request))
 
 # generates a list of data
-
+@login_required
 def query(request):
 
 	volunteer = Volunteer.objects.all()
@@ -97,7 +104,7 @@ def application_result(request, uid):
     if admin_is_logged_in():
        volunteer = get_object_or_404(Volunteer, id=uid)
        try:
-	 result = request.GET['result']
+	 result = request.POST['result']
        except KeyError:
          raise Http404    #TODO display a failure page
        if result == 'Approve':
@@ -112,6 +119,18 @@ def application_result(request, uid):
                                    context_instance=RequestContext(request))
     else:
         return login_redirect(request)
+
+@login_required
+def profile(request):
+  user = request.user
+  volunteer_profile = get_object_or_404(Volunteer, email=user.email)
+  #if user's profile does not yet exist we should force them to direct to the application page
+
+  if (not volunteer_profile):
+    return redirect('apply')
+
+  return render_to_response("volunteer/profile.html", {"profile":volunteer_profile},
+                            context_instance=RequestContext(request))
 
 @permission_required("volunteer.admin")
 def application_list(request):
@@ -140,7 +159,7 @@ def signup(request):
             new_user = authenticate(username=request.POST['username'],
                                 password=request.POST['password'], email=request.POST['email'])
             login(request, new_user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("apply"))
         else:
             return render_to_response('volunteer/register.html', {'form': form}, context_instance=RequestContext(request))
       except IntegrityError, e:
@@ -193,7 +212,7 @@ def volunteer_list(request):
 		volunteerList = Volunteer.objects.all()
 		fieldNames = [x[0] for x in generate_field_list(volunteerList[0])]
 		fieldValues = [[x[1] for x in generate_field_list(v)] for v in volunteerList]
-		return render_to_response('volunteer/volunteerList.html',
+		return render_to_response('volunteer/searchContent.htm',
                       {'header_list': fieldNames, 'data_table':fieldValues},
                       context_instance=RequestContext(request))
 	else:
@@ -207,6 +226,22 @@ def volunteer_info(request, id):
     	'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience}
     	return render_to_response('volunteer/volInfo.html', values, 
     		context_instance=RequestContext(request))
+
+@login_required
+def volunteer_info(request, id):
+  if admin_is_logged_in():
+    volunteer =  get_object_or_404(Volunteer, id=id)
+    values = {'id':volunteer.id,'name': volunteer.name, 'email': volunteer.email, 'phoneNum': volunteer.phone, 'address': volunteer.address, 
+    'refName1': volunteer.reference1name, 'refPhone1': volunteer.reference1phone, 'refName2': volunteer.reference2name, 
+    'refPhone2': volunteer.reference2email, 'selfIntro': volunteer.experience, "adminView":True, "isApproved":volunteer.isApproved}
+    return render_to_response('volunteer/volInfo.html', values, 
+    	context_instance=RequestContext(request))
+  else:
+    volunteer = get_object_or_404(Volunteer, id=id)
+    values["adminView":False]
+    return render_to_response('volunteer/volInfo.html', values, 
+      context_instance=RequestContext(request))
+
 @permission_required("volunteer.admin")
 def add_event(request):
     def err_with_csrf(msg):
@@ -251,10 +286,6 @@ def add_event(request):
         success_info = {'success_msg':'Event created.'} 
         success_info.update(csrf(request))
         return render_to_response('volunteer/addEvents.html', success_info, context_instance=RequestContext(request))
-
-def logout_page(request):
-    logout(request)
-    return HttpRedirectResponse('/')
 
 @login_required
 def program_list(request):
@@ -318,8 +349,18 @@ def program_events(request, programId):
 def event_info(request, evtId):
     event = get_object_or_404(Event, id=evtId)
     program = event.name
-    volunteerCount = Volunteer.objects.filter(events__id__exact=evtId).count()
-    evtTuple = event_listitem_tuple(event)
-    return HttpResponse(program.name + " runs on " + evtTuple[1] + 
-                        " from " + evtTuple[2] + " until " + evtTuple[3] +
-                        " and has " + str(volunteerCount) + " volunteers.")
+    volunteers = Volunteer.objects.filter(events__id__exact=evtId)
+
+    evtTuple = event_listitem_tuple(event)   
+ 
+    msgString = (program.name + " runs on " + evtTuple[1] + 
+                " from " + evtTuple[2] + " until " + evtTuple[3] +
+                " and has " + str(volunteers.count()) + " volunteers.")
+    vTuples = map(name_email_id_tuple, volunteers)
+    return render_to_response("volunteer/event_info.html",
+                 {'message':msgString, 'volunteers':vTuples},
+                 context_instance=RequestContext(request))
+
+def logout_page(request):
+    logout(request)
+    return redirect('index')

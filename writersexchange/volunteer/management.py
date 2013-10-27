@@ -39,6 +39,9 @@ def program_for_name(name):
       pForName = programs[0]
   return pForName
 
+def name_email_id_tuple(volunteer):
+  return (volunteer.name, volunteer.email, volunteer.id)
+
 def event_listitem_tuple(evt):
   return (evt.id, 
    evt.date.strftime("%a, %b %d %Y"), 
