@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Volunteer List</title>
+</head>
+
+<body>
+	<table>
+	<tr>
+		{% for header in header_list %}
+		<th> header </th>
+		{% endfor %}
+	</tr>
+
+	{% for volunteer_data in data_table %}
+		<tr>
+		{% for item in volunteer_data %}
+			<td> item </td>	
+		{% endfor %}
+		</tr>
+	{% endfor %}	
+	
+	</table>
+</body>
+
+</html>
