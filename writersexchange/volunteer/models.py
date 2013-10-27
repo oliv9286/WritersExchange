@@ -33,6 +33,7 @@ class Volunteer(models.Model):
 
 	events = models.ManyToManyField(Event)
 
+
 	def is_approved(self):
 		return self.isApproved
 
@@ -41,4 +42,15 @@ class Volunteer(models.Model):
 
 	def hasTraining(self):
 		return self.hasTraining
+
+
+class Program(models.Model):
+	name = models.CharField(max_length=200, null=False)
+
+class Event(models.Model):
+	startDTTM = models.DateTimeField(max_length=12, auto_now_add=False, null=False)
+	endDTTM = models.DateTimeField(max_length=12, auto_now_add=False, null=False)
+	name = models.CharField(max_length=200, null=False)
+
+	program = models.ForeignKey(Program)
 
