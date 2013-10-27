@@ -3,21 +3,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Volunteer</title>
-    <!-- Alan: CSS fix -->
     <link href="/static/css/application.css" type="text/css" rel="stylesheet" >
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+    <script type="text/javascript" src="/static/jquery.searchContent.js"></script>
+    <script type="text/javascript" src="/static/vendor/additional-methods.js"></script>
+    <script type="text/javascript" src="/static/vendor/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/jquery.validate.js"></script>
   </head>
   <body>
-<!-- Calendar reminders-->
-    {% if reminders %}
-        <div class="gr">Alerts</div>
-        {% for reminder in reminders %}<p> {{ reminder.short|safe }}</p>
-        {% endfor %}
-    {% endif %}
-    <!-- Content -->
     {% block content %}
       {{ content }}
     {% endblock %}
-    <!-- END Content -->
   </body>
 </html>

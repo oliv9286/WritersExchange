@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from volunteer import views
-from writersexchange import settings
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -28,8 +29,8 @@ urlpatterns = patterns('',
     url(r'^events/(\d{4})/(\d+)/(\d+)/', views.day_events),
     url(r'^events/(\d{4})/(\d+)/', views.month_events),
     url(r'^events/signup/', views.event_signup),
-    url(r'^applications/', views.volunteer_list),
     url(r'^volunteers/(\d+)/', views.volunteer_info),
-    url(r'^events/create/', views.add_event)
-)
+    url(r'^events/create/', views.add_event),
+    url(r'^applications/', views.volunteer_list)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
